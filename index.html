@@ -7,47 +7,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gunmetal: #2d2d30;
-            --void: #121212;
-            --steel: #a9a9a9;
+            --gunmetal: #1a1a1b;
+            --void: #0a0a0a;
+            --steel: #64748b;
             --white: #ffffff;
-            --alert-red: #ff4b2b;
-            --success-green: #00e676;
+            --alert-red: #ef4444;
+            --success-green: #10b981;
+            --accent-blue: #38b6ff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--void); color: var(--white); overflow-x: hidden; min-height: 100vh; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--void); color: var(--white); overflow-x: hidden; min-height: 100vh; line-height: 1.6; }
 
-        header { padding: 60px 20px; text-align: center; border-bottom: 1px solid var(--gunmetal); }
-        .logo { font-weight: 900; font-size: 3rem; letter-spacing: 0.8rem; color: var(--white); text-transform: uppercase; }
+        header { padding: 40px 20px; text-align: center; border-bottom: 1px solid #1e1e1e; background: var(--void); }
+        .logo { font-weight: 900; font-size: 2.8rem; letter-spacing: 0.8rem; color: var(--white); text-transform: uppercase; }
 
-        #movality-app { max-width: 850px; margin: 40px auto; padding: 20px; }
+        #movality-app { max-width: 800px; margin: 40px auto 150px auto; padding: 20px; }
 
         .logic-card {
             background: var(--gunmetal);
-            border: 1px solid #3e3e42;
-            padding: 40px; margin-bottom: 25px; border-radius: 4px;
-            animation: fadeIn 0.4s ease-out;
+            border: 1px solid #2d2d2d;
+            padding: 40px; margin-bottom: 30px; border-radius: 8px;
+            animation: fadeIn 0.5s ease-out forwards;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        label { display: block; text-transform: uppercase; font-size: 0.7rem; font-weight: 900; color: var(--steel); margin-bottom: 15px; letter-spacing: 0.2rem; }
+        label { display: block; text-transform: uppercase; font-size: 0.75rem; font-weight: 900; color: var(--accent-blue); margin-bottom: 15px; letter-spacing: 0.2rem; }
         
-        .ai-suggestion { color: var(--success-green); font-style: italic; font-size: 0.9rem; margin-bottom: 15px; display: block; }
+        .ai-status { color: var(--success-green); font-size: 0.85rem; font-weight: 700; margin-bottom: 15px; display: block; text-transform: uppercase; }
         
-        input { width: 100%; background: transparent; border: none; border-bottom: 2px solid #3e3e42; color: white; font-size: 1.4rem; padding: 12px 0; outline: none; transition: 0.3s; }
-        input:focus { border-bottom-color: var(--white); }
+        input { width: 100%; background: transparent; border: none; border-bottom: 1px solid #334155; color: white; font-size: 1.4rem; padding: 12px 0; outline: none; transition: 0.3s; font-weight: 400; }
+        input:focus { border-bottom-color: var(--accent-blue); }
 
-        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; transition: 0.3s; margin-top: 20px; margin-right: 15px; font-size: 0.8rem; }
+        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; transition: 0.3s; margin-top: 25px; margin-right: 15px; font-size: 0.8rem; border-radius: 4px; }
         .btn-primary { background: var(--white); color: var(--void); }
-        .btn-ghost { background: transparent; border: 1px solid var(--steel); color: var(--steel); }
-        .btn:hover { opacity: 0.8; transform: translateY(-2px); }
+        .btn-ghost { background: transparent; border: 1px solid #475569; color: #94a3b8; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 
-        .alert-box { border: 1px solid var(--alert-red); color: var(--alert-red); padding: 20px; margin-top: 20px; border-radius: 4px; font-size: 0.9rem; }
+        .alert-box { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--alert-red); color: var(--alert-red); padding: 25px; margin-top: 20px; border-radius: 4px; font-size: 0.95rem; }
 
-        .ticker-wrap { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px 0; border-top: 1px solid var(--gunmetal); }
-        .ticker { display: inline-block; white-space: nowrap; animation: ticker 40s linear infinite; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; opacity: 0.5; }
+        .ticker-wrap { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px 0; border-top: 1px solid #1e1e1e; z-index: 100; }
+        .ticker { display: inline-block; white-space: nowrap; animation: ticker 40s linear infinite; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; color: #475569; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
     </style>
 </head>
@@ -68,41 +70,55 @@
 
 <div class="ticker-wrap">
     <div class="ticker">
-        LOGIC OVER OPINION • CLARITY OVER CHAOS • MOVEMENT IS THE ONLY METRIC • THE SWIRL DIES HERE
+        REMOVING THE SWIRL • LOGIC OVER OPINION • CLARITY IS SOVEREIGN • INPUT DRIVES OUTPUT • THE LEDGER NEVER LIES
     </div>
 </div>
 
 <script>
     const suggestedMoves = [
-        "Identify Value-Stream Pods (Map Outputs, not Roles)",
-        "Establish Peer-to-Peer Decision Gates (Flatten Hierarchy)",
-        "Decentralize Performance Metrics to the Pod Level",
-        "Implement Direct-to-Ledger Evidence Logs",
-        "Phase-out Legacy Management Titles to Prevent Relapse"
+        "Map Value-Stream Pods (Identify Outputs, not Roles)",
+        "Dissolve Middle-Management Approvals (Peer-to-Peer Gatekeeping)",
+        "Establish Direct-to-Consumer Velocity Metrics",
+        "Implement 'Right-to-Ship' Evidence Logs for Pod Members",
+        "Decommission Legacy Vertical Org-Charts"
     ];
 
     let currentStep = 0;
 
     function generateLogic() {
-        const intent = document.getElementById('intent-input').value;
-        if (!intent) return;
+        const intentInput = document.getElementById('intent-input');
+        if (!intentInput.value) return;
+        
+        // Visual feedback that it's working
+        const startBtn = event.target;
+        startBtn.innerHTML = "Processing Logic...";
+        startBtn.disabled = true;
+        intentInput.disabled = true;
         document.getElementById('intent-screen').style.opacity = "0.5";
-        showNextAIStep();
+        
+        setTimeout(() => {
+            showNextAIStep();
+        }, 800);
     }
 
     function showNextAIStep() {
-        if (currentStep >= suggestedMoves.length) { showFinalize(); return; }
+        if (currentStep >= suggestedMoves.length) { 
+            showFinalize(); 
+            return; 
+        }
 
         const container = document.getElementById('logic-gate-flow');
         const div = document.createElement('div');
         div.className = 'logic-card';
         div.innerHTML = `
-            <label>Engine Suggestion: Move ${currentStep + 1}</label>
-            <span class="ai-suggestion">Logic: This move prevents vertical bottlenecks.</span>
+            <label>Move ${currentStep + 1} of 5</label>
+            <span class="ai-status">Engine Intelligence Applied: Logic Verified</span>
             <input type="text" id="step-${currentStep}" value="${suggestedMoves[currentStep]}">
             <div id="alert-${currentStep}"></div>
-            <button class="btn btn-primary" onclick="validateStep(${currentStep})">Accept Move</button>
-            <button class="btn btn-ghost" onclick="detectFriction(${currentStep})">Edit Manually</button>
+            <div id="controls-${currentStep}">
+                <button class="btn btn-primary" onclick="validateStep(${currentStep})">Accept Move</button>
+                <button class="btn btn-ghost" onclick="detectFriction(${currentStep})">Edit Logic</button>
+            </div>
         `;
         container.appendChild(div);
         div.scrollIntoView({ behavior: 'smooth' });
@@ -110,22 +126,23 @@
 
     function validateStep(index) {
         document.getElementById(`step-${index}`).disabled = true;
-        event.target.style.display = 'none';
+        document.getElementById(`controls-${index}`).style.display = 'none';
         currentStep++;
         showNextAIStep();
     }
 
     function detectFriction(index) {
-        const input = document.getElementById(`step-${index}`);
         const alertDiv = document.getElementById(`alert-${index}`);
+        const controls = document.getElementById(`controls-${index}`);
         
-        // Simulating the "Logic Gate" detecting a move that adds a bottleneck
+        controls.style.display = 'none';
+        
         alertDiv.innerHTML = `
             <div class="alert-box">
-                <strong>LOGIC DISSONANCE DETECTED:</strong> Your manual change introduces a hierarchical bottleneck. 
-                This contradicts the 'Horizontal' intent. Reverting to Engine Suggestion is recommended.
+                <strong>LOGIC DISSONANCE DETECTED:</strong> Manual editing of this move risks re-introducing hierarchical bottlenecks (The Swirl). 
+                The Engine recommends sticking to the Decentralized Pod structure to maintain horizontal flow.
             </div>
-            <button class="btn btn-primary" style="background: var(--alert-red)" onclick="validateStep(${index})">Override & Risk Stalling</button>
+            <button class="btn btn-primary" style="background: var(--alert-red)" onclick="validateStep(${index})">Override Logic (High Risk)</button>
             <button class="btn btn-ghost" onclick="revertStep(${index})">Accept Engine Fix</button>
         `;
     }
@@ -133,20 +150,20 @@
     function revertStep(index) {
         document.getElementById(`step-${index}`).value = suggestedMoves[index];
         document.getElementById(`alert-${index}`).innerHTML = "";
-        validateStep(index);
+        document.getElementById(`controls-${index}`).style.display = 'block';
     }
 
     function showFinalize() {
         const container = document.getElementById('logic-gate-flow');
         const div = document.createElement('div');
         div.className = 'logic-card';
-        div.style.background = "#fff";
-        div.style.color = "#000";
+        div.style.background = "var(--white)";
+        div.style.color = "var(--void)";
         div.innerHTML = `
-            <label style="color: #666;">Success Path Verified</label>
-            <h2 style="font-size: 2rem; margin-bottom: 20px;">MOVALITY ACHIEVED</h2>
-            <p>The logic is sound. Hierarchy is dissolved. Movement is enabled.</p>
-            <button class="btn btn-primary" onclick="location.reload()">New Intent</button>
+            <label style="color: #64748b;">Verification Protocol: Complete</label>
+            <h2 style="font-size: 2.2rem; margin-bottom: 15px; font-weight: 900;">LOGIC SECURED</h2>
+            <p style="font-size: 1.1rem; opacity: 0.8;">The horizontal restructuring is now verified and ready for the Ledger.</p>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 30px;" onclick="location.reload()">New Strategic Intent</button>
         `;
         container.appendChild(div);
         div.scrollIntoView({ behavior: 'smooth' });
