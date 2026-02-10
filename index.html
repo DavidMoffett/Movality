@@ -3,52 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOVALITY | The Logic Gate</title>
+    <title>MOVALITY | The Success Engine</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gunmetal: #1a1a1b;
-            --void: #0a0a0a;
-            --steel: #64748b;
+            --obsidian: #0a0a0b;
+            --gunmetal: #1c1c1e;
+            --steel: #4b5563;
+            --accent: #38b6ff;
             --white: #ffffff;
-            --alert-red: #ef4444;
-            --success-green: #10b981;
-            --accent-blue: #38b6ff;
+            --risk: #ff4d4d;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--void); color: var(--white); overflow-x: hidden; min-height: 100vh; line-height: 1.6; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--obsidian); color: var(--white); overflow-x: hidden; min-height: 100vh; }
 
-        header { padding: 40px 20px; text-align: center; border-bottom: 1px solid #1e1e1e; background: var(--void); }
-        .logo { font-weight: 900; font-size: 2.8rem; letter-spacing: 0.8rem; color: var(--white); text-transform: uppercase; }
+        header { padding: 50px; text-align: center; border-bottom: 1px solid var(--gunmetal); }
+        .logo { font-weight: 900; font-size: 2.5rem; letter-spacing: 0.8rem; text-transform: uppercase; }
 
-        #movality-app { max-width: 800px; margin: 40px auto 150px auto; padding: 20px; }
+        #movality-app { max-width: 850px; margin: 40px auto 150px auto; padding: 20px; }
 
         .logic-card {
             background: var(--gunmetal);
-            border: 1px solid #2d2d2d;
-            padding: 40px; margin-bottom: 30px; border-radius: 8px;
-            animation: fadeIn 0.4s ease-out forwards;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border: 1px solid #2c2c2e;
+            padding: 40px; margin-bottom: 30px; border-radius: 4px;
+            animation: slideUp 0.5s ease-out forwards;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        label { display: block; text-transform: uppercase; font-size: 0.75rem; font-weight: 900; color: var(--accent-blue); margin-bottom: 15px; letter-spacing: 0.2rem; }
-        .ai-status { color: var(--success-green); font-size: 0.85rem; font-weight: 700; margin-bottom: 15px; display: block; text-transform: uppercase; }
+        label { display: block; text-transform: uppercase; font-size: 0.7rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 0.2rem; }
         
-        input { width: 100%; background: transparent; border: none; border-bottom: 1px solid #334155; color: white; font-size: 1.4rem; padding: 12px 0; outline: none; font-weight: 400; }
-        input:focus { border-bottom-color: var(--accent-blue); }
+        .prediction-badge { background: rgba(56, 182, 255, 0.1); border: 1px solid var(--accent); color: var(--accent); padding: 10px; font-size: 0.8rem; font-weight: 700; border-radius: 4px; margin-bottom: 20px; display: inline-block; }
 
-        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; transition: 0.2s; margin-top: 25px; margin-right: 15px; font-size: 0.8rem; border-radius: 4px; }
-        .btn-primary { background: var(--white); color: var(--void); }
-        .btn-ghost { background: transparent; border: 1px solid #475569; color: #94a3b8; }
+        input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--steel); color: white; font-size: 1.4rem; padding: 12px 0; outline: none; }
+        input:focus { border-bottom-color: var(--white); }
+
+        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; transition: 0.2s; margin-top: 25px; margin-right: 15px; font-size: 0.8rem; }
+        .btn-primary { background: var(--white); color: var(--obsidian); }
+        .btn-ghost { background: transparent; border: 1px solid var(--steel); color: var(--steel); }
         
-        .alert-box { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--alert-red); color: var(--alert-red); padding: 25px; margin-top: 20px; border-radius: 4px; }
+        .dissonance-box { border: 1px solid var(--risk); color: var(--risk); padding: 20px; margin-top: 20px; border-radius: 4px; font-size: 0.9rem; }
 
-        .ticker-wrap { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px 0; border-top: 1px solid #1e1e1e; z-index: 100; }
-        .ticker { display: inline-block; white-space: nowrap; animation: ticker 40s linear infinite; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; color: #475569; }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .comp-item { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -61,111 +59,100 @@
     <div id="intent-screen" class="logic-card">
         <label>Strategic Intent</label>
         <input type="text" id="intent-input" placeholder="e.g., Restructure Marketing to Horizontal Hierarchy" autofocus>
-        <button id="ignite-btn" class="btn btn-primary" onclick="generateLogic()">Evaluate & Ignite</button>
+        <button class="btn btn-primary" onclick="igniteEngine()">Evaluate & Ignite</button>
     </div>
-    <div id="logic-gate-flow"></div>
+    <div id="flow-container"></div>
 </main>
 
-<div class="ticker-wrap">
-    <div class="ticker">
-        REMOVING THE SWIRL • LOGIC OVER OPINION • CLARITY IS POWER • INPUT DRIVES OUTPUT • THE LEDGER NEVER LIES
-    </div>
-</div>
-
 <script>
-    const suggestedMoves = [
-        "Map Value-Stream Pods (Identify Outputs, not Roles)",
-        "Dissolve Middle-Management Approvals (Peer-to-Peer Gatekeeping)",
-        "Establish Direct-to-Consumer Velocity Metrics",
-        "Implement 'Right-to-Ship' Evidence Logs for Pod Members",
-        "Decommission Legacy Vertical Org-Charts"
+    const marketingMoves = [
+        { move: "Map Output-Based Pods", logic: "Prevents functional silos and aligns teams to customer value." },
+        { move: "Remove Middle-Management Gates", logic: "Ensures decision-making velocity by empowering the frontline." },
+        { move: "Assign 'Right-to-Ship' Protocols", logic: "Clarifies accountability without needing VP signatures." },
+        { move: "Sync to Peer-Verified Ledger", logic: "Creates transparent evidence of completion." },
+        { move: "Decommission Legacy Job Titles", logic: "Prevents the psychological return of old hierarchies." }
     ];
 
-    let currentStep = 0;
+    let current = 0;
+    let userMoves = [];
 
-    // Direct, simplified trigger
-    window.generateLogic = function() {
-        const intentVal = document.getElementById('intent-input').value;
-        if (!intentVal) {
-            alert("Strategic Intent Required to Ignite.");
-            return;
-        }
-        
-        // Visual Lock
-        document.getElementById('ignite-btn').innerText = "ENGINE ACTIVE...";
-        document.getElementById('ignite-btn').disabled = true;
-        document.getElementById('intent-input').disabled = true;
-        document.getElementById('intent-screen').style.opacity = "0.5";
-        
-        // Immediate call
-        showNextAIStep();
-    };
+    function igniteEngine() {
+        const val = document.getElementById('intent-input').value;
+        if (!val) return;
+        document.getElementById('intent-screen').style.opacity = "0.3";
+        showStep();
+    }
 
-    function showNextAIStep() {
-        if (currentStep >= suggestedMoves.length) { 
-            showFinalize(); 
-            return; 
-        }
+    function showStep() {
+        if (current >= marketingMoves.length) { showComparison(); return; }
 
-        const container = document.getElementById('logic-gate-flow');
+        const container = document.getElementById('flow-container');
         const div = document.createElement('div');
         div.className = 'logic-card';
         div.innerHTML = `
-            <label>Move ${currentStep + 1} of 5</label>
-            <span class="ai-status">Logic Verified</span>
-            <input type="text" id="step-${currentStep}" value="${suggestedMoves[currentStep]}">
-            <div id="alert-${currentStep}"></div>
-            <div id="controls-${currentStep}">
-                <button class="btn btn-primary" onclick="validateStep(${currentStep})">Accept Move</button>
-                <button class="btn btn-ghost" onclick="detectFriction(${currentStep})">Edit Logic</button>
+            <label>Move ${current + 1} of 5</label>
+            <div class="prediction-badge">PREDICTED SUCCESS: +40% Velocity</div>
+            <input type="text" id="input-${current}" value="${marketingMoves[current].move}">
+            <p style="font-size: 0.85rem; color: var(--steel); margin-top:10px;">${marketingMoves[current].logic}</p>
+            <div id="alert-${current}"></div>
+            <div id="actions-${current}">
+                <button class="btn btn-primary" onclick="advance(${current})">Accept Move</button>
+                <button class="btn btn-ghost" onclick="triggerDissonance(${current})">Edit Logic</button>
             </div>
         `;
         container.appendChild(div);
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 
-    window.validateStep = function(index) {
-        document.getElementById(`step-${index}`).disabled = true;
-        document.getElementById(`controls-${index}`).style.display = 'none';
-        currentStep++;
-        showNextAIStep();
-    };
+    function advance(idx) {
+        userMoves.push(document.getElementById(`input-${idx}`).value);
+        document.getElementById(`input-${idx}`).disabled = true;
+        document.getElementById(`actions-${idx}`).style.display = 'none';
+        current++;
+        showStep();
+    }
 
-    window.detectFriction = function(index) {
-        const alertDiv = document.getElementById(`alert-${index}`);
-        const controls = document.getElementById(`controls-${index}`);
-        controls.style.display = 'none';
-        
-        alertDiv.innerHTML = `
-            <div class="alert-box">
-                <strong>LOGIC DISSONANCE:</strong> Manual change risks re-introducing vertical bottlenecks.
+    function triggerDissonance(idx) {
+        document.getElementById(`alert-${idx}`).innerHTML = `
+            <div class="dissonance-box">
+                <strong>LOGIC DISSONANCE:</strong> Manual override detected. Predicted success dropped to +12%. Re-introducing bottlenecks creates 'The Swirl'.
             </div>
-            <button class="btn btn-primary" style="background: var(--alert-red)" onclick="validateStep(${index})">Override</button>
-            <button class="btn btn-ghost" onclick="revertStep(${index})">Accept Fix</button>
+            <button class="btn btn-primary" style="background: var(--risk)" onclick="advance(${idx})">Accept Penalty</button>
+            <button class="btn btn-ghost" onclick="revert(${idx})">Accept Engine Fix</button>
         `;
-    };
+    }
 
-    window.revertStep = function(index) {
-        document.getElementById(`step-${index}`).value = suggestedMoves[index];
-        document.getElementById(`alert-${index}`).innerHTML = "";
-        document.getElementById(`controls-${index}`).style.display = 'block';
-    };
+    function revert(idx) {
+        document.getElementById(`input-${idx}`).value = marketingMoves[idx].move;
+        document.getElementById(`alert-${idx}`).innerHTML = "";
+    }
 
-    function showFinalize() {
-        const container = document.getElementById('logic-gate-flow');
+    function showComparison() {
+        const container = document.getElementById('flow-container');
         const div = document.createElement('div');
         div.className = 'logic-card';
-        div.style.background = "#ffffff";
-        div.style.color = "#000000";
+        div.style.background = "var(--white)";
+        div.style.color = "var(--obsidian)";
         div.innerHTML = `
-            <label style="color: #64748b;">Verification Complete</label>
-            <h2 style="font-size: 2.2rem; margin-bottom: 15px; font-weight: 900;">LOGIC SECURED</h2>
-            <p>The movement is verified. Hierarchy dissolved.</p>
-            <button class="btn btn-primary" style="width: 100%; margin-top: 30px;" onclick="location.reload()">New Strategic Intent</button>
+            <label style="color: var(--steel);">Audit & Comparison</label>
+            <h2 style="margin-bottom: 20px;">Success Metric Comparison</h2>
+            <div class="comparison-grid">
+                <div class="comp-item">
+                    <label style="color: var(--steel);">Predicted Success</label>
+                    <div style="font-size: 1.5rem; font-weight: 900;">+40% Velocity</div>
+                    <p style="font-size: 0.8rem;">Based on horizontal logic.</p>
+                </div>
+                <div class="comp-item">
+                    <label style="color: var(--steel);">Actual Result</label>
+                    <input type="text" placeholder="Enter % gain..." style="color: black; border-bottom: 1px solid black;">
+                </div>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 30px;" onclick="location.reload()">Verify & Close Ledger</button>
         `;
         container.appendChild(div);
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 </script>
+
 </body>
 </html>
