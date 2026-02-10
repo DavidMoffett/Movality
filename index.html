@@ -7,53 +7,50 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --sky-blue: #38b6ff;
-            --silver-metal: #e2e8f0;
-            --deep-midnight: #0f172a;
-            --white: #ffffff;
-            --glass: rgba(255, 255, 255, 0.15);
+            --imperial-blue: #1e40af; /* Darker, richer blue */
+            --deep-midnight: #020617;
+            --silver: #f1f5f9;
+            --glass: rgba(255, 255, 255, 0.1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--sky-blue); color: var(--white); overflow-x: hidden; min-height: 100vh; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--imperial-blue); color: var(--silver); overflow-x: hidden; min-height: 100vh; }
 
-        header { padding: 50px 20px; text-align: center; }
-        .logo { font-weight: 900; font-size: 3.5rem; letter-spacing: 0.6rem; color: var(--white); text-transform: uppercase; text-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        header { padding: 60px 20px; text-align: center; }
+        .logo { font-weight: 900; font-size: 3.5rem; letter-spacing: 0.7rem; color: var(--silver); text-transform: uppercase; }
 
-        #movality-app { max-width: 850px; margin: 0 auto 150px auto; padding: 20px; }
+        #movality-app { max-width: 800px; margin: 0 auto 150px auto; padding: 20px; }
 
         .step-container {
             background: var(--glass);
-            backdrop-filter: blur(12px);
-            border-left: 6px solid var(--deep-midnight);
-            padding: 40px; margin-bottom: 25px; border-radius: 4px 20px 20px 4px;
+            backdrop-filter: blur(15px);
+            border-left: 4px solid var(--deep-midnight);
+            padding: 40px; margin-bottom: 30px; border-radius: 4px;
             animation: slideIn 0.4s ease-out forwards;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        label { display: block; text-transform: uppercase; font-size: 0.8rem; font-weight: 900; color: var(--deep-midnight); margin-bottom: 15px; letter-spacing: 0.1rem; }
-        input { width: 100%; background: transparent; border: none; border-bottom: 2px solid var(--deep-midnight); color: var(--deep-midnight); font-size: 1.3rem; padding: 12px 0; outline: none; font-weight: 600; }
-        input::placeholder { color: rgba(15, 23, 42, 0.4); }
+        label { display: block; text-transform: uppercase; font-size: 0.75rem; font-weight: 900; color: var(--deep-midnight); margin-bottom: 15px; letter-spacing: 0.2rem; }
+        input { width: 100%; background: transparent; border: none; border-bottom: 2px solid var(--deep-midnight); color: white; font-size: 1.4rem; padding: 10px 0; outline: none; }
 
-        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border-radius: 4px; border: none; transition: 0.3s; margin-top: 15px; margin-right: 12px; font-size: 0.85rem; letter-spacing: 0.05rem; }
-        .btn-primary { background: var(--deep-midnight); color: var(--white); }
+        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; transition: 0.2s; margin-top: 20px; margin-right: 15px; font-size: 0.8rem; }
+        .btn-primary { background: var(--deep-midnight); color: white; }
         .btn-outline { background: transparent; border: 2px solid var(--deep-midnight); color: var(--deep-midnight); }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .btn:hover { background: white; color: var(--deep-midnight); }
 
         #ledger-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--deep-midnight); z-index: 1000; padding: 60px; overflow-y: auto;
         }
         .ledger-table { width: 100%; border-collapse: collapse; margin-top: 40px; }
-        .ledger-table th { text-align: left; color: var(--sky-blue); border-bottom: 2px solid var(--sky-blue); padding: 20px; font-size: 0.75rem; letter-spacing: 0.2rem; }
-        .ledger-table td { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 1rem; color: var(--white); }
+        .ledger-table th { text-align: left; color: var(--imperial-blue); border-bottom: 1px solid var(--imperial-blue); padding: 20px; font-size: 0.7rem; letter-spacing: 0.2rem; }
+        .ledger-table td { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.95rem; }
 
-        .ticker-wrap { position: fixed; bottom: 0; width: 100%; background: var(--deep-midnight); padding: 15px 0; overflow: hidden; border-top: 1px solid var(--sky-blue); }
-        .ticker { display: inline-block; white-space: nowrap; animation: ticker 45s linear infinite; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.15rem; }
+        .ticker-wrap { position: fixed; bottom: 0; width: 100%; background: var(--deep-midnight); padding: 15px 0; border-top: 1px solid rgba(255,255,255,0.1); }
+        .ticker { display: inline-block; white-space: nowrap; animation: ticker 50s linear infinite; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        .ticker span { margin-right: 60px; color: var(--sky-blue); }
+        .ticker span { margin-right: 60px; color: var(--imperial-blue); }
     </style>
 </head>
 <body>
@@ -73,52 +70,51 @@
 </main>
 
 <div id="ledger-overlay">
-    <h1 style="color: var(--white); letter-spacing: 0.5rem; font-weight: 900; margin-bottom: 10px;">TRUTH LEDGER</h1>
-    <p style="color: var(--sky-blue); font-weight: 700; letter-spacing: 0.1rem;">Verified Institutional Memory</p>
+    <h1 style="letter-spacing: 0.5rem; margin-bottom: 10px;">TRUTH LEDGER</h1>
     <table class="ledger-table">
         <thead>
             <tr><th>TIMESTAMP</th><th>INTENT</th><th>EVIDENCE ID</th></tr>
         </thead>
         <tbody id="ledger-body"></tbody>
     </table>
-    <button class="btn btn-primary" style="margin-top: 50px; background: var(--sky-blue); color: var(--deep-midnight);" onclick="toggleLedger(false)">Exit Vault</button>
+    <button class="btn btn-primary" style="margin-top: 50px;" onclick="toggleLedger(false)">Close Vault</button>
 </div>
 
 <div class="ticker-wrap">
     <div class="ticker">
-        <span>KILL THE SWIRL</span><span>VELOCITY OVER ACTIVITY</span><span>CLARITY IS POWER</span><span>INPUT DRIVES OUTPUT</span><span>THE LEDGER NEVER LIES</span><span>EVIDENCE IS SOVEREIGN</span>
+        <span>KILL THE SWIRL</span><span>VELOCITY OVER ACTIVITY</span><span>CLARITY IS POWER</span><span>INPUT DRIVES OUTPUT</span><span>THE LEDGER NEVER LIES</span><span>EVIDENCE IS POWER</span>
     </div>
 </div>
 
 <script>
     let currentMove = 1;
-    let flowData = { intent: "", moves: [], evidenceId: "" };
+    let flowData = { intent: "", moves: [] };
     let ledger = JSON.parse(localStorage.getItem('movality_ledger')) || [];
 
     function startFlow() {
-        const intent = document.getElementById('intent-input').value;
-        if (!intent) return;
-        flowData.intent = intent;
-        document.getElementById('intent-screen').style.opacity = "0.4";
-        document.getElementById('intent-input').disabled = true;
+        const input = document.getElementById('intent-input');
+        if (!input.value) return;
+        flowData.intent = input.value;
+        document.getElementById('intent-screen').style.opacity = "0.3";
+        input.disabled = true;
         showNextMove();
     }
 
     function showNextMove() {
-        if (currentMove > 5) { showOutput(); return; }
-        const flowContainer = document.getElementById('tunnel-flow');
-        const moveDiv = document.createElement('div');
-        moveDiv.className = 'step-container';
-        moveDiv.innerHTML = `
-            <label>Movement Step ${currentMove}</label>
-            <input type="text" id="move-${currentMove}" placeholder="Execute next move..." autofocus>
-            <button class="btn btn-primary" onclick="advanceMove(${currentMove})">Advance</button>
+        if (currentMove > 5) { finalize(); return; }
+        const container = document.getElementById('tunnel-flow');
+        const div = document.createElement('div');
+        div.className = 'step-container';
+        div.innerHTML = `
+            <label>Move ${currentMove}</label>
+            <input type="text" id="move-${currentMove}" placeholder="Execute..." autofocus>
+            <button class="btn btn-primary" onclick="advance(${currentMove})">Advance Move</button>
         `;
-        flowContainer.appendChild(moveDiv);
-        moveDiv.scrollIntoView({ behavior: 'smooth' });
+        container.appendChild(div);
+        div.scrollIntoView({ behavior: 'smooth' });
     }
 
-    function advanceMove(num) {
+    function advance(num) {
         const val = document.getElementById(`move-${num}`).value;
         if (!val) return;
         flowData.moves.push(val);
@@ -128,38 +124,37 @@
         showNextMove();
     }
 
-    function showOutput() {
+    function finalize() {
         const id = "MV-" + Math.random().toString(36).substr(2, 6).toUpperCase();
-        flowData.evidenceId = id;
         ledger.push({ date: new Date().toLocaleString(), intent: flowData.intent, id: id });
         localStorage.setItem('movality_ledger', JSON.stringify(ledger));
 
-        const outputDiv = document.createElement('div');
-        outputDiv.className = 'step-container';
-        outputDiv.style.background = "var(--deep-midnight)";
-        outputDiv.style.color = "var(--white)";
-        outputDiv.innerHTML = `
-            <label style="color: var(--sky-blue);">Movement Verified</label>
-            <h2 style="font-size: 2.5rem; margin-bottom:20px; letter-spacing: 0.2rem;">${id}</h2>
-            <button class="btn btn-primary" style="background: var(--sky-blue); color: var(--deep-midnight);" onclick="copyId('${id}')">Copy Evidence</button>
-            <button class="btn btn-outline" style="border-color: var(--white); color: var(--white);" onclick="toggleLedger(true)">Open Ledger</button>
-            <button class="btn btn-primary" style="background: white; color: var(--deep-midnight);" onclick="location.reload()">Reset Engine</button>
+        const div = document.createElement('div');
+        div.className = 'step-container';
+        div.style.background = "white";
+        div.style.color = "var(--deep-midnight)";
+        div.innerHTML = `
+            <label>Output Generated</label>
+            <h2 style="font-size: 2rem; margin-bottom: 10px;">${id}</h2>
+            <p style="margin-bottom: 20px; font-weight: 600;">Refined Path: ${flowData.moves.join(' → ')}</p>
+            <button class="btn btn-primary" onclick="copy('${id}')">Copy Evidence</button>
+            <button class="btn btn-outline" onclick="toggleLedger(true)">View Ledger</button>
+            <button class="btn btn-outline" style="border:none;" onclick="location.reload()">Reset</button>
         `;
-        document.getElementById('tunnel-flow').appendChild(outputDiv);
-        outputDiv.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('tunnel-flow').appendChild(div);
+        div.scrollIntoView({ behavior: 'smooth' });
     }
 
-    function copyId(id) {
+    function copy(id) {
         navigator.clipboard.writeText(id);
-        alert("Evidence ID Copied to Clipboard");
+        alert("Evidence ID Copied.");
     }
 
     function toggleLedger(show) {
         const overlay = document.getElementById('ledger-overlay');
-        const body = document.getElementById('ledger-body');
         if (show) {
-            body.innerHTML = ledger.map(item => `
-                <tr><td>${item.date}</td><td>${item.intent}</td><td><strong>${item.id}</strong></td></tr>
+            document.getElementById('ledger-body').innerHTML = ledger.map(i => `
+                <tr><td>${i.date}</td><td>${i.intent}</td><td><strong>${i.id}</strong></td></tr>
             `).reverse().join('');
             overlay.style.display = 'block';
         } else { overlay.style.display = 'none'; }
