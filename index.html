@@ -3,54 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOVALITY | The Universal Engine</title>
+    <title>MOVALITY | Universal Engine</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --imperial-blue: #1e40af; /* Darker, richer blue */
-            --deep-midnight: #020617;
-            --silver: #f1f5f9;
-            --glass: rgba(255, 255, 255, 0.1);
+            --midnight-blue: #0f172a; /* Deeper, more sophisticated blue */
+            --void: #020617;
+            --silver: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.08);
+            --accent: #38b6ff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--imperial-blue); color: var(--silver); overflow-x: hidden; min-height: 100vh; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--midnight-blue); color: var(--silver); overflow-x: hidden; min-height: 100vh; }
 
         header { padding: 60px 20px; text-align: center; }
-        .logo { font-weight: 900; font-size: 3.5rem; letter-spacing: 0.7rem; color: var(--silver); text-transform: uppercase; }
+        .logo { font-weight: 900; font-size: 3.5rem; letter-spacing: 0.8rem; color: var(--silver); text-transform: uppercase; }
 
         #movality-app { max-width: 800px; margin: 0 auto 150px auto; padding: 20px; }
 
         .step-container {
             background: var(--glass);
-            backdrop-filter: blur(15px);
-            border-left: 4px solid var(--deep-midnight);
+            backdrop-filter: blur(20px);
+            border-left: 4px solid var(--void);
             padding: 40px; margin-bottom: 30px; border-radius: 4px;
             animation: slideIn 0.4s ease-out forwards;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        label { display: block; text-transform: uppercase; font-size: 0.75rem; font-weight: 900; color: var(--deep-midnight); margin-bottom: 15px; letter-spacing: 0.2rem; }
-        input { width: 100%; background: transparent; border: none; border-bottom: 2px solid var(--deep-midnight); color: white; font-size: 1.4rem; padding: 10px 0; outline: none; }
+        label { display: block; text-transform: uppercase; font-size: 0.7rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 0.2rem; }
+        input { width: 100%; background: transparent; border: none; border-bottom: 2px solid var(--void); color: white; font-size: 1.5rem; padding: 12px 0; outline: none; transition: 0.3s; }
+        input:focus { border-bottom-color: var(--accent); }
 
-        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; transition: 0.2s; margin-top: 20px; margin-right: 15px; font-size: 0.8rem; }
-        .btn-primary { background: var(--deep-midnight); color: white; }
-        .btn-outline { background: transparent; border: 2px solid var(--deep-midnight); color: var(--deep-midnight); }
-        .btn:hover { background: white; color: var(--deep-midnight); }
+        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; transition: 0.3s; margin-top: 20px; margin-right: 15px; font-size: 0.8rem; letter-spacing: 0.1rem; }
+        .btn-primary { background: var(--void); color: white; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-outline { background: transparent; border: 2px solid var(--void); color: var(--silver); opacity: 0.7; }
+        .btn:hover { background: var(--accent); color: var(--void); transform: translateY(-2px); }
 
         #ledger-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--deep-midnight); z-index: 1000; padding: 60px; overflow-y: auto;
+            background: var(--void); z-index: 1000; padding: 60px; overflow-y: auto;
         }
         .ledger-table { width: 100%; border-collapse: collapse; margin-top: 40px; }
-        .ledger-table th { text-align: left; color: var(--imperial-blue); border-bottom: 1px solid var(--imperial-blue); padding: 20px; font-size: 0.7rem; letter-spacing: 0.2rem; }
-        .ledger-table td { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.95rem; }
+        .ledger-table th { text-align: left; color: var(--accent); border-bottom: 1px solid var(--accent); padding: 20px; font-size: 0.7rem; letter-spacing: 0.3rem; }
+        .ledger-table td { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 1rem; }
 
-        .ticker-wrap { position: fixed; bottom: 0; width: 100%; background: var(--deep-midnight); padding: 15px 0; border-top: 1px solid rgba(255,255,255,0.1); }
-        .ticker { display: inline-block; white-space: nowrap; animation: ticker 50s linear infinite; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; }
+        .ticker-wrap { position: fixed; bottom: 0; width: 100%; background: var(--void); padding: 18px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+        .ticker { display: inline-block; white-space: nowrap; animation: ticker 50s linear infinite; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        .ticker span { margin-right: 60px; color: var(--imperial-blue); }
+        .ticker span { margin-right: 80px; color: var(--accent); }
     </style>
 </head>
 <body>
@@ -62,7 +65,7 @@
 <main id="movality-app">
     <div id="intent-screen" class="step-container">
         <label>Strategic Intent</label>
-        <input type="text" id="intent-input" placeholder="Define the objective..." autofocus>
+        <input type="text" id="intent-input" placeholder="What is the objective?" autofocus>
         <button class="btn btn-primary" onclick="startFlow()">Ignite</button>
         <button class="btn btn-outline" onclick="toggleLedger(true)">The Ledger</button>
     </div>
@@ -70,19 +73,20 @@
 </main>
 
 <div id="ledger-overlay">
-    <h1 style="letter-spacing: 0.5rem; margin-bottom: 10px;">TRUTH LEDGER</h1>
+    <h1 style="letter-spacing: 0.8rem; margin-bottom: 10px; font-weight: 900;">TRUTH LEDGER</h1>
+    <p style="color: var(--accent); font-weight: 700;">Verified Institutional Memory</p>
     <table class="ledger-table">
         <thead>
             <tr><th>TIMESTAMP</th><th>INTENT</th><th>EVIDENCE ID</th></tr>
         </thead>
         <tbody id="ledger-body"></tbody>
     </table>
-    <button class="btn btn-primary" style="margin-top: 50px;" onclick="toggleLedger(false)">Close Vault</button>
+    <button class="btn btn-primary" style="margin-top: 50px; background: var(--accent); color: var(--void);" onclick="toggleLedger(false)">Close Vault</button>
 </div>
 
 <div class="ticker-wrap">
     <div class="ticker">
-        <span>KILL THE SWIRL</span><span>VELOCITY OVER ACTIVITY</span><span>CLARITY IS POWER</span><span>INPUT DRIVES OUTPUT</span><span>THE LEDGER NEVER LIES</span><span>EVIDENCE IS POWER</span>
+        <span>KILL THE SWIRL</span><span>VELOCITY OVER ACTIVITY</span><span>CLARITY IS POWER</span><span>INPUT DRIVES OUTPUT</span><span>THE LEDGER NEVER LIES</span><span>MOVEMENT IS THE ONLY METRIC</span>
     </div>
 </div>
 
@@ -95,7 +99,7 @@
         const input = document.getElementById('intent-input');
         if (!input.value) return;
         flowData.intent = input.value;
-        document.getElementById('intent-screen').style.opacity = "0.3";
+        document.getElementById('intent-screen').style.opacity = "0.4";
         input.disabled = true;
         showNextMove();
     }
@@ -108,7 +112,7 @@
         div.innerHTML = `
             <label>Move ${currentMove}</label>
             <input type="text" id="move-${currentMove}" placeholder="Execute..." autofocus>
-            <button class="btn btn-primary" onclick="advance(${currentMove})">Advance Move</button>
+            <button class="btn btn-primary" onclick="advance(${currentMove})">Advance</button>
         `;
         container.appendChild(div);
         div.scrollIntoView({ behavior: 'smooth' });
@@ -132,14 +136,15 @@
         const div = document.createElement('div');
         div.className = 'step-container';
         div.style.background = "white";
-        div.style.color = "var(--deep-midnight)";
+        div.style.color = "var(--void)";
+        div.style.borderLeft = "none";
         div.innerHTML = `
-            <label>Output Generated</label>
-            <h2 style="font-size: 2rem; margin-bottom: 10px;">${id}</h2>
-            <p style="margin-bottom: 20px; font-weight: 600;">Refined Path: ${flowData.moves.join(' → ')}</p>
-            <button class="btn btn-primary" onclick="copy('${id}')">Copy Evidence</button>
-            <button class="btn btn-outline" onclick="toggleLedger(true)">View Ledger</button>
-            <button class="btn btn-outline" style="border:none;" onclick="location.reload()">Reset</button>
+            <label style="color: var(--midnight-blue);">Verification Complete</label>
+            <h2 style="font-size: 2.5rem; margin-bottom: 10px; font-weight: 900;">${id}</h2>
+            <p style="margin-bottom: 25px; font-size: 1.1rem; line-height: 1.6;"><strong>Path:</strong> ${flowData.moves.join(' → ')}</p>
+            <button class="btn btn-primary" onclick="copy('${id}')">Copy Evidence ID</button>
+            <button class="btn btn-outline" style="border-color: var(--void); color: var(--void);" onclick="toggleLedger(true)">The Ledger</button>
+            <button class="btn btn-primary" style="background: var(--accent); color: var(--void); border: none;" onclick="location.reload()">Reset Engine</button>
         `;
         document.getElementById('tunnel-flow').appendChild(div);
         div.scrollIntoView({ behavior: 'smooth' });
@@ -147,7 +152,7 @@
 
     function copy(id) {
         navigator.clipboard.writeText(id);
-        alert("Evidence ID Copied.");
+        alert("Evidence ID Copied to Clipboard.");
     }
 
     function toggleLedger(show) {
