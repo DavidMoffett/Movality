@@ -3,57 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOVALITY | Universal Engine</title>
+    <title>MOVALITY | The Logic Gate</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --midnight-blue: #0f172a; /* Deeper, more sophisticated blue */
-            --void: #020617;
-            --silver: #f8fafc;
-            --glass: rgba(255, 255, 255, 0.08);
-            --accent: #38b6ff;
+            --gunmetal: #2d2d30;
+            --void: #121212;
+            --steel: #a9a9a9;
+            --white: #ffffff;
+            --alert-red: #ff4b2b;
+            --success-green: #00e676;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--midnight-blue); color: var(--silver); overflow-x: hidden; min-height: 100vh; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--void); color: var(--white); overflow-x: hidden; min-height: 100vh; }
 
-        header { padding: 60px 20px; text-align: center; }
-        .logo { font-weight: 900; font-size: 3.5rem; letter-spacing: 0.8rem; color: var(--silver); text-transform: uppercase; }
+        header { padding: 60px 20px; text-align: center; border-bottom: 1px solid var(--gunmetal); }
+        .logo { font-weight: 900; font-size: 3rem; letter-spacing: 0.8rem; color: var(--white); text-transform: uppercase; }
 
-        #movality-app { max-width: 800px; margin: 0 auto 150px auto; padding: 20px; }
+        #movality-app { max-width: 850px; margin: 40px auto; padding: 20px; }
 
-        .step-container {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border-left: 4px solid var(--void);
-            padding: 40px; margin-bottom: 30px; border-radius: 4px;
-            animation: slideIn 0.4s ease-out forwards;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        .logic-card {
+            background: var(--gunmetal);
+            border: 1px solid #3e3e42;
+            padding: 40px; margin-bottom: 25px; border-radius: 4px;
+            animation: fadeIn 0.4s ease-out;
         }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
 
-        label { display: block; text-transform: uppercase; font-size: 0.7rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 0.2rem; }
-        input { width: 100%; background: transparent; border: none; border-bottom: 2px solid var(--void); color: white; font-size: 1.5rem; padding: 12px 0; outline: none; transition: 0.3s; }
-        input:focus { border-bottom-color: var(--accent); }
+        label { display: block; text-transform: uppercase; font-size: 0.7rem; font-weight: 900; color: var(--steel); margin-bottom: 15px; letter-spacing: 0.2rem; }
+        
+        .ai-suggestion { color: var(--success-green); font-style: italic; font-size: 0.9rem; margin-bottom: 15px; display: block; }
+        
+        input { width: 100%; background: transparent; border: none; border-bottom: 2px solid #3e3e42; color: white; font-size: 1.4rem; padding: 12px 0; outline: none; transition: 0.3s; }
+        input:focus { border-bottom-color: var(--white); }
 
-        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; transition: 0.3s; margin-top: 20px; margin-right: 15px; font-size: 0.8rem; letter-spacing: 0.1rem; }
-        .btn-primary { background: var(--void); color: white; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-outline { background: transparent; border: 2px solid var(--void); color: var(--silver); opacity: 0.7; }
-        .btn:hover { background: var(--accent); color: var(--void); transform: translateY(-2px); }
+        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; transition: 0.3s; margin-top: 20px; margin-right: 15px; font-size: 0.8rem; }
+        .btn-primary { background: var(--white); color: var(--void); }
+        .btn-ghost { background: transparent; border: 1px solid var(--steel); color: var(--steel); }
+        .btn:hover { opacity: 0.8; transform: translateY(-2px); }
 
-        #ledger-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--void); z-index: 1000; padding: 60px; overflow-y: auto;
-        }
-        .ledger-table { width: 100%; border-collapse: collapse; margin-top: 40px; }
-        .ledger-table th { text-align: left; color: var(--accent); border-bottom: 1px solid var(--accent); padding: 20px; font-size: 0.7rem; letter-spacing: 0.3rem; }
-        .ledger-table td { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 1rem; }
+        .alert-box { border: 1px solid var(--alert-red); color: var(--alert-red); padding: 20px; margin-top: 20px; border-radius: 4px; font-size: 0.9rem; }
 
-        .ticker-wrap { position: fixed; bottom: 0; width: 100%; background: var(--void); padding: 18px 0; border-top: 1px solid rgba(255,255,255,0.05); }
-        .ticker { display: inline-block; white-space: nowrap; animation: ticker 50s linear infinite; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; }
+        .ticker-wrap { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px 0; border-top: 1px solid var(--gunmetal); }
+        .ticker { display: inline-block; white-space: nowrap; animation: ticker 40s linear infinite; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; opacity: 0.5; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        .ticker span { margin-right: 80px; color: var(--accent); }
     </style>
 </head>
 <body>
@@ -63,106 +58,98 @@
 </header>
 
 <main id="movality-app">
-    <div id="intent-screen" class="step-container">
+    <div id="intent-screen" class="logic-card">
         <label>Strategic Intent</label>
-        <input type="text" id="intent-input" placeholder="What is the objective?" autofocus>
-        <button class="btn btn-primary" onclick="startFlow()">Ignite</button>
-        <button class="btn btn-outline" onclick="toggleLedger(true)">The Ledger</button>
+        <input type="text" id="intent-input" placeholder="e.g., Restructure Marketing to Horizontal Hierarchy" autofocus>
+        <button class="btn btn-primary" onclick="generateLogic()">Evaluate & Ignite</button>
     </div>
-    <div id="tunnel-flow"></div>
+    <div id="logic-gate-flow"></div>
 </main>
-
-<div id="ledger-overlay">
-    <h1 style="letter-spacing: 0.8rem; margin-bottom: 10px; font-weight: 900;">TRUTH LEDGER</h1>
-    <p style="color: var(--accent); font-weight: 700;">Verified Institutional Memory</p>
-    <table class="ledger-table">
-        <thead>
-            <tr><th>TIMESTAMP</th><th>INTENT</th><th>EVIDENCE ID</th></tr>
-        </thead>
-        <tbody id="ledger-body"></tbody>
-    </table>
-    <button class="btn btn-primary" style="margin-top: 50px; background: var(--accent); color: var(--void);" onclick="toggleLedger(false)">Close Vault</button>
-</div>
 
 <div class="ticker-wrap">
     <div class="ticker">
-        <span>KILL THE SWIRL</span><span>VELOCITY OVER ACTIVITY</span><span>CLARITY IS POWER</span><span>INPUT DRIVES OUTPUT</span><span>THE LEDGER NEVER LIES</span><span>MOVEMENT IS THE ONLY METRIC</span>
+        LOGIC OVER OPINION • CLARITY OVER CHAOS • MOVEMENT IS THE ONLY METRIC • THE SWIRL DIES HERE
     </div>
 </div>
 
 <script>
-    let currentMove = 1;
-    let flowData = { intent: "", moves: [] };
-    let ledger = JSON.parse(localStorage.getItem('movality_ledger')) || [];
+    const suggestedMoves = [
+        "Identify Value-Stream Pods (Map Outputs, not Roles)",
+        "Establish Peer-to-Peer Decision Gates (Flatten Hierarchy)",
+        "Decentralize Performance Metrics to the Pod Level",
+        "Implement Direct-to-Ledger Evidence Logs",
+        "Phase-out Legacy Management Titles to Prevent Relapse"
+    ];
 
-    function startFlow() {
-        const input = document.getElementById('intent-input');
-        if (!input.value) return;
-        flowData.intent = input.value;
-        document.getElementById('intent-screen').style.opacity = "0.4";
-        input.disabled = true;
-        showNextMove();
+    let currentStep = 0;
+
+    function generateLogic() {
+        const intent = document.getElementById('intent-input').value;
+        if (!intent) return;
+        document.getElementById('intent-screen').style.opacity = "0.5";
+        showNextAIStep();
     }
 
-    function showNextMove() {
-        if (currentMove > 5) { finalize(); return; }
-        const container = document.getElementById('tunnel-flow');
+    function showNextAIStep() {
+        if (currentStep >= suggestedMoves.length) { showFinalize(); return; }
+
+        const container = document.getElementById('logic-gate-flow');
         const div = document.createElement('div');
-        div.className = 'step-container';
+        div.className = 'logic-card';
         div.innerHTML = `
-            <label>Move ${currentMove}</label>
-            <input type="text" id="move-${currentMove}" placeholder="Execute..." autofocus>
-            <button class="btn btn-primary" onclick="advance(${currentMove})">Advance</button>
+            <label>Engine Suggestion: Move ${currentStep + 1}</label>
+            <span class="ai-suggestion">Logic: This move prevents vertical bottlenecks.</span>
+            <input type="text" id="step-${currentStep}" value="${suggestedMoves[currentStep]}">
+            <div id="alert-${currentStep}"></div>
+            <button class="btn btn-primary" onclick="validateStep(${currentStep})">Accept Move</button>
+            <button class="btn btn-ghost" onclick="detectFriction(${currentStep})">Edit Manually</button>
         `;
         container.appendChild(div);
         div.scrollIntoView({ behavior: 'smooth' });
     }
 
-    function advance(num) {
-        const val = document.getElementById(`move-${num}`).value;
-        if (!val) return;
-        flowData.moves.push(val);
+    function validateStep(index) {
+        document.getElementById(`step-${index}`).disabled = true;
         event.target.style.display = 'none';
-        document.getElementById(`move-${num}`).disabled = true;
-        currentMove++;
-        showNextMove();
+        currentStep++;
+        showNextAIStep();
     }
 
-    function finalize() {
-        const id = "MV-" + Math.random().toString(36).substr(2, 6).toUpperCase();
-        ledger.push({ date: new Date().toLocaleString(), intent: flowData.intent, id: id });
-        localStorage.setItem('movality_ledger', JSON.stringify(ledger));
-
-        const div = document.createElement('div');
-        div.className = 'step-container';
-        div.style.background = "white";
-        div.style.color = "var(--void)";
-        div.style.borderLeft = "none";
-        div.innerHTML = `
-            <label style="color: var(--midnight-blue);">Verification Complete</label>
-            <h2 style="font-size: 2.5rem; margin-bottom: 10px; font-weight: 900;">${id}</h2>
-            <p style="margin-bottom: 25px; font-size: 1.1rem; line-height: 1.6;"><strong>Path:</strong> ${flowData.moves.join(' → ')}</p>
-            <button class="btn btn-primary" onclick="copy('${id}')">Copy Evidence ID</button>
-            <button class="btn btn-outline" style="border-color: var(--void); color: var(--void);" onclick="toggleLedger(true)">The Ledger</button>
-            <button class="btn btn-primary" style="background: var(--accent); color: var(--void); border: none;" onclick="location.reload()">Reset Engine</button>
+    function detectFriction(index) {
+        const input = document.getElementById(`step-${index}`);
+        const alertDiv = document.getElementById(`alert-${index}`);
+        
+        // Simulating the "Logic Gate" detecting a move that adds a bottleneck
+        alertDiv.innerHTML = `
+            <div class="alert-box">
+                <strong>LOGIC DISSONANCE DETECTED:</strong> Your manual change introduces a hierarchical bottleneck. 
+                This contradicts the 'Horizontal' intent. Reverting to Engine Suggestion is recommended.
+            </div>
+            <button class="btn btn-primary" style="background: var(--alert-red)" onclick="validateStep(${index})">Override & Risk Stalling</button>
+            <button class="btn btn-ghost" onclick="revertStep(${index})">Accept Engine Fix</button>
         `;
-        document.getElementById('tunnel-flow').appendChild(div);
+    }
+
+    function revertStep(index) {
+        document.getElementById(`step-${index}`).value = suggestedMoves[index];
+        document.getElementById(`alert-${index}`).innerHTML = "";
+        validateStep(index);
+    }
+
+    function showFinalize() {
+        const container = document.getElementById('logic-gate-flow');
+        const div = document.createElement('div');
+        div.className = 'logic-card';
+        div.style.background = "#fff";
+        div.style.color = "#000";
+        div.innerHTML = `
+            <label style="color: #666;">Success Path Verified</label>
+            <h2 style="font-size: 2rem; margin-bottom: 20px;">MOVALITY ACHIEVED</h2>
+            <p>The logic is sound. Hierarchy is dissolved. Movement is enabled.</p>
+            <button class="btn btn-primary" onclick="location.reload()">New Intent</button>
+        `;
+        container.appendChild(div);
         div.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function copy(id) {
-        navigator.clipboard.writeText(id);
-        alert("Evidence ID Copied to Clipboard.");
-    }
-
-    function toggleLedger(show) {
-        const overlay = document.getElementById('ledger-overlay');
-        if (show) {
-            document.getElementById('ledger-body').innerHTML = ledger.map(i => `
-                <tr><td>${i.date}</td><td>${i.intent}</td><td><strong>${i.id}</strong></td></tr>
-            `).reverse().join('');
-            overlay.style.display = 'block';
-        } else { overlay.style.display = 'none'; }
     }
 </script>
 </body>
