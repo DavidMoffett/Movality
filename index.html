@@ -3,44 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOVALITY | The Architect</title>
+    <title>MOVALITY | Forensic Engine</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --obsidian: #050505;
-            --gunmetal: #121212;
-            --accent: #38b6ff;
-            --white: #ffffff;
-            --gold: #d4af37;
-            --risk: #ef4444;
-            --success: #10b981;
+            --obsidian: #050505; --gunmetal: #121212; --accent: #38b6ff;
+            --white: #ffffff; --gold: #d4af37; --risk: #ef4444; --success: #10b981;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--obsidian); color: #ccc; line-height: 1.6; }
-
         header { padding: 30px; text-align: center; border-bottom: 1px solid #222; }
         .logo { font-weight: 900; font-size: 2rem; letter-spacing: 0.8rem; text-transform: uppercase; color: var(--white); }
-
         #movality-app { max-width: 900px; margin: 40px auto 120px auto; padding: 20px; }
-
         .screen { display: none; animation: fadeIn 0.4s ease-out forwards; }
         .screen.active { display: block; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         .logic-card { background: var(--gunmetal); border: 1px solid #222; padding: 40px; border-radius: 4px; margin-bottom: 20px; }
         label { display: block; text-transform: uppercase; font-size: 0.7rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 0.2rem; }
-        
         input, textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; color: white; font-size: 1.2rem; padding: 12px 0; outline: none; margin-bottom: 20px; }
-        
         .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; font-size: 0.8rem; border-radius: 2px; transition: 0.2s; }
         .btn-primary { background: var(--white); color: var(--obsidian); }
-        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
-
-        .ai-status { color: var(--success); font-weight: 700; font-size: 0.8rem; margin-bottom: 10px; display: block; }
+        .btn-gold { background: var(--gold); color: black; width: 100%; margin-top: 30px; }
         .jtbd-white { background: #fff; color: #000; padding: 40px; border-radius: 4px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .alert-box { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--risk); color: var(--risk); padding: 20px; border-radius: 4px; margin-top: 15px; }
+        .report-section { border-bottom: 1px solid #eee; padding: 15px 0; }
+        .metric-pill { display: inline-block; padding: 4px 10px; background: rgba(56, 182, 255, 0.1); color: var(--accent); border-radius: 12px; font-size: 0.7rem; font-weight: 900; }
     </style>
 </head>
 <body>
@@ -48,116 +34,81 @@
 <header><div class="logo">Movality</div></header>
 
 <main id="movality-app">
-    
     <div id="step-1" class="screen active">
         <div class="logic-card">
             <label>Phase 1: Strategic Intent</label>
-            <input type="text" id="user-intent" placeholder="e.g., Restructure Marketing to Horizontal Hierarchy" autofocus>
-            <button class="btn btn-primary" onclick="processIntent()">Evaluate & Architect</button>
+            <input type="text" id="user-intent" placeholder="What is the mission?" autofocus>
+            <button class="btn btn-primary" onclick="ignite()">Evaluate & Generate Moves</button>
         </div>
     </div>
 
     <div id="step-2" class="screen">
         <div class="logic-card">
-            <label>Phase 2: Engine Synthesis</label>
-            <span class="ai-status">LOGIC VERIFIED | PREDICTED SUCCESS: +40% VELOCITY</span>
-            <div id="engine-moves-container"></div>
-            <div id="dissonance-warning"></div>
-            <button class="btn btn-primary" onclick="goToJTBD()">Accept Logic & Issue JTBDs</button>
+            <label>Phase 2: Execution Architecture</label>
+            <div id="moves-list" style="margin-bottom: 30px;"></div>
+            
+            <div class="jtbd-white">
+                <label style="color:#888;">Accountability Assignment</label>
+                <input type="text" id="owner" placeholder="Name of Person Accountable" style="color:black; border-bottom:1px solid #ddd;">
+                <label style="color:#888;">Field Observations / Blockers</label>
+                <textarea id="obs" placeholder="Any friction detected during execution?" style="color:black; border-bottom:1px solid #ddd;"></textarea>
+                <button class="btn btn-primary" style="width:100%;" onclick="finalize()">Generate CEO Briefing</button>
+            </div>
         </div>
     </div>
 
     <div id="step-3" class="screen">
-        <div class="logic-card">
-            <label>Phase 3: Execution Directive</label>
-            <h2>The JTBD Pipeline</h2>
-            <p style="margin-bottom:20px;">The engine has prepared the instructions. Assign the delivery owner.</p>
-            
-            <div class="jtbd-white">
-                <label style="color:#888;">Owner Assignment</label>
-                <input type="text" id="owner-name" placeholder="Name of Person Responsible" style="color:black; border-bottom:1px solid #ddd;">
-                
-                <p><strong>JTBD:</strong> You must dissolve middle-management approval gates and establish peer-to-peer sign-off protocols to achieve horizontal velocity.</p>
-                
-                <hr style="margin:20px 0;">
-                <button class="btn btn-primary" onclick="goToReport()">Issue & Verify</button>
-                <button class="btn btn-outline" style="border-color:#000; color:#000; margin-left:10px;" onclick="showNeg()">Negotiate</button>
-                
-                <div id="neg-area" style="display:none; margin-top:20px;">
-                    <textarea id="blocker-log" placeholder="State the reason for negotiation/blocker..." style="color:black; border-bottom:1px solid #ddd;"></textarea>
-                </div>
-            </div>
-        </div>
+        <div class="jtbd-white" id="ceo-report"></div>
+        <button class="btn btn-gold" onclick="location.reload()">Accept & Seal Directive</button>
     </div>
-
-    <div id="step-4" class="screen">
-        <div class="jtbd-white" id="final-report"></div>
-        <button class="btn btn-primary" style="margin-top:20px; width:100%; background:var(--gold);" onclick="location.reload()">Accept & Seal: Return to Home</button>
-    </div>
-
 </main>
 
 <script>
-    const marketingMoves = [
-        "Map Output-Based Pods (Replacing Silos)",
-        "Dissolve Middle-Management Approvals",
-        "Assign 'Right-to-Ship' Peer Protocols",
-        "Implement Direct-to-Ledger Velocity Metrics",
-        "Decommission Legacy Org-Charts"
+    const engineIntelligence = [
+        { move: "Map Output-Based Pods", impact: "+15% Velocity" },
+        { move: "Dissolve Middle-Management Gates", impact: "+25% Velocity" },
+        { move: "Sync Local Scoreboards to Ledger", impact: "Verification Secured" }
     ];
 
-    let state = { intent: "", owner: "", blocker: "" };
+    let state = { intent: "", owner: "", obs: "" };
 
-    function processIntent() {
+    function ignite() {
         state.intent = document.getElementById('user-intent').value;
         if (!state.intent) return;
         
-        const container = document.getElementById('engine-moves-container');
-        container.innerHTML = `<p style="margin-bottom:15px; font-weight:900;">Engine-Generated Movement Path:</p>`;
-        
-        marketingMoves.forEach((move, i) => {
-            container.innerHTML += `
-                <div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:4px; margin-bottom:10px; border-left:2px solid var(--accent);">
-                    <span style="color:var(--accent); font-weight:900;">MOVE ${i+1}:</span> ${move}
-                </div>
-            `;
+        let list = document.getElementById('moves-list');
+        list.innerHTML = `<p style="margin-bottom:15px; font-weight:900;">Engine Directives:</p>`;
+        engineIntelligence.forEach(m => {
+            list.innerHTML += `<div style="padding:15px; background:#1e1e1e; border-radius:4px; margin-bottom:10px;">
+                <span class="metric-pill">${m.impact}</span> <span style="margin-left:10px;">${m.move}</span>
+            </div>`;
         });
-
         switchScreen(2);
     }
 
-    function goToJTBD() { switchScreen(3); }
+    function finalize() {
+        state.owner = document.getElementById('owner').value;
+        state.obs = document.getElementById('obs').value;
+        if (!state.owner) return alert("Owner Required.");
 
-    function showNeg() { document.getElementById('neg-area').style.display = 'block'; }
-
-    function goToReport() {
-        state.owner = document.getElementById('owner-name').value;
-        state.blocker = document.getElementById('blocker-log').value;
-        if (!state.owner) { alert("Accountability Owner Required."); return; }
-        
-        const report = document.getElementById('final-report');
-        const status = state.blocker ? '<span style="color:red;">BLOCKED (CEO OVERRIDE REQUIRED)</span>' : '<span style="color:green;">VERIFIED</span>';
+        let report = document.getElementById('ceo-report');
+        let status = state.obs ? '<span style="color:red;">INTERVENTION REQUIRED</span>' : '<span style="color:green;">MOVEMENT VERIFIED</span>';
         
         report.innerHTML = `
             <label style="color:#888;">Executive Methodology Report</label>
-            <h1 style="margin: 10px 0;">Strategic Status: ${status}</h1>
-            <div style="margin:20px 0; border-bottom:1px solid #eee; padding-bottom:15px;">
-                <strong>Strategic Intent:</strong><br>${state.intent}
-            </div>
-            <div style="margin-bottom:15px;">
-                <strong>Execution Owner:</strong> ${state.owner}
-            </div>
-            <div style="background:#f9f9f9; padding:20px; border-radius:4px;">
-                <strong>Blockers Logged:</strong><br>${state.blocker || 'None. Movement remains horizontal.'}
-            </div>
-            <p style="margin-top:20px; font-size:0.8rem; opacity:0.6;">Methodology: Movality Architecture v32.0</p>
+            <h1 style="margin: 10px 0;">Status: ${status}</h1>
+            <div class="report-section"><strong>Strategic Intent:</strong><br>${state.intent}</div>
+            <div class="report-section"><strong>Execution Lead:</strong><br>${state.owner}</div>
+            <div class="report-section"><strong>Engine Forecast:</strong><br>+40% Potential Gain across 3 Directives.</div>
+            <div class="report-section"><strong>Human Audit (Blockers):</strong><br>${state.obs || 'No friction detected. Strategic integrity maintained.'}</div>
+            <div style="margin-top:20px; font-weight:900; color:var(--accent);">Conclusion: ${state.obs ? 'Strategic intent compromised by external friction. Re-alignment required.' : 'Velocity targets met. Recommendation: Institutionalize.'}</div>
         `;
-        switchScreen(4);
+        switchScreen(3);
     }
 
-    function switchScreen(num) {
+    function switchScreen(n) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById('step-' + num).classList.add('active');
+        document.getElementById('step-' + n).classList.add('active');
         window.scrollTo(0,0);
     }
 </script>
