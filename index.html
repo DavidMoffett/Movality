@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOVALITY | JTBD Engine</title>
+    <title>MOVALITY | Executive Seal</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,32 +11,36 @@
             --gunmetal: #121212;
             --accent: #38b6ff;
             --white: #ffffff;
-            --silver: #94a3b8;
+            --gold: #d4af37;
+            --risk: #ef4444;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--obsidian); color: var(--silver); line-height: 1.6; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--obsidian); color: #ccc; line-height: 1.6; }
 
-        header { padding: 40px; text-align: center; border-bottom: 1px solid #222; }
-        .logo { font-weight: 900; font-size: 2rem; letter-spacing: 0.8rem; text-transform: uppercase; color: var(--white); }
+        header { padding: 30px; text-align: center; border-bottom: 1px solid #222; }
+        .logo { font-weight: 900; font-size: 1.8rem; letter-spacing: 0.8rem; text-transform: uppercase; color: var(--white); }
 
-        #movality-app { max-width: 850px; margin: 40px auto 100px auto; padding: 20px; }
+        #movality-app { max-width: 900px; margin: 40px auto; padding: 20px; }
 
-        .logic-card {
-            background: var(--gunmetal);
-            border: 1px solid #222;
-            padding: 40px; margin-bottom: 30px; border-radius: 4px;
-        }
+        .screen { display: none; animation: fadeIn 0.3s ease-out forwards; }
+        .screen.active { display: block; }
 
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .logic-card { background: var(--gunmetal); border: 1px solid #222; padding: 40px; border-radius: 4px; margin-bottom: 20px; }
         label { display: block; text-transform: uppercase; font-size: 0.7rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 0.2rem; }
         
-        input { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; color: white; font-size: 1.1rem; padding: 12px 0; outline: none; margin-bottom: 20px; }
-        input:focus { border-bottom-color: var(--accent); }
-
-        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; transition: 0.2s; font-size: 0.8rem; border-radius: 2px; }
+        input, textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; color: white; font-size: 1.1rem; padding: 12px 0; outline: none; margin-bottom: 20px; }
+        
+        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; font-size: 0.8rem; border-radius: 2px; transition: 0.2s; }
         .btn-primary { background: var(--white); color: var(--obsidian); }
+        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+        .btn-back { background: transparent; color: #666; font-size: 0.7rem; border: none; padding: 10px; margin-bottom: 10px; display: inline-block; }
+        .btn-back:hover { color: var(--white); }
 
-        .jtbd-box { background: #fff; color: #000; padding: 30px; border-radius: 4px; margin-top: 20px; border-left: 10px solid var(--accent); }
+        .jtbd-white { background: #fff; color: #000; padding: 40px; border-radius: 4px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .report-section { border-bottom: 1px solid #eee; padding: 20px 0; }
     </style>
 </head>
 <body>
@@ -44,39 +48,90 @@
 <header><div class="logo">Movality</div></header>
 
 <main id="movality-app">
-    <div id="flow-container">
+    
+    <div id="screen-1" class="screen active">
         <div class="logic-card">
-            <label>Corrective Move: Pod-Authority Lockdown</label>
-            <p style="margin-bottom: 20px; font-size: 0.9rem;">The goal is to eliminate shadow approvals and empower pod leaders.</p>
-            <input type="text" id="assignee" placeholder="Assign Delivery Owner (e.g. Sarah Jenkins)">
-            <button class="btn btn-primary" onclick="generateJTBD()">Generate JTBD Directive</button>
+            <label>JTBD Issuance</label>
+            <h2>Move: Dissolve Middle-Management Approvals</h2>
+            <p style="margin: 20px 0;">Target Owner: <strong>Sarah Jenkins</strong></p>
+            <div class="jtbd-white">
+                <p><strong>Instruction:</strong> Establish peer-to-peer sign-off protocols for all digital spend by [Date].</p>
+                <hr style="margin: 20px 0;">
+                <button class="btn btn-primary" onclick="nextScreen(2)">Accept JTBD</button>
+                <button class="btn btn-outline" style="border-color: #000; color: #000; margin-left: 10px;" onclick="toggleRejection(true)">Negotiate</button>
+                
+                <div id="rejection-box" style="display:none; margin-top:20px;">
+                    <textarea id="rejection-reason" placeholder="State reason for negotiation..."></textarea>
+                    <button class="btn btn-primary" style="background: var(--risk); color: white;" onclick="nextScreen(4)">Log & Escalate</button>
+                </div>
+            </div>
         </div>
-        <div id="jtbd-output"></div>
     </div>
+
+    <div id="screen-2" class="screen">
+        <button class="btn-back" onclick="nextScreen(1)">← Back to Issuance</button>
+        <div class="logic-card">
+            <label>Action Ledger</label>
+            <h2>Recording Active Moves</h2>
+            <textarea id="action-log" placeholder="Move 1: ..."></textarea>
+            <button class="btn btn-primary" onclick="nextScreen(3)">Proceed to Verification</button>
+        </div>
+    </div>
+
+    <div id="screen-3" class="screen">
+        <button class="btn-back" onclick="nextScreen(2)">← Back to Ledger</button>
+        <div class="logic-card">
+            <label>Verification</label>
+            <h2>Final Result Capture</h2>
+            <input type="text" id="evidence-link" placeholder="Evidence ID / Link">
+            <button class="btn btn-primary" onclick="nextScreen(4)">Generate Final Report</button>
+        </div>
+    </div>
+
+    <div id="screen-4" class="screen">
+        <button class="btn-back" onclick="nextScreen(3)">← Back to Edit</button>
+        <div class="jtbd-white" id="final-report"></div>
+        <button class="btn btn-primary" style="margin-top:20px; width: 100%; background: var(--gold);" onclick="sealAndReset()">Accept & Seal: Return to Start</button>
+    </div>
+
 </main>
 
 <script>
-    function generateJTBD() {
-        const name = document.getElementById('assignee').value;
-        if (!name) return alert("Accountability required. Enter a name.");
+    let userData = { rejection: "", actions: "", evidence: "" };
 
-        const output = document.getElementById('jtbd-output');
-        output.innerHTML = `
-            <div class="jtbd-box">
-                <label style="color: #666;">Job To Be Done (JTBD)</label>
-                <h2 style="margin: 10px 0;">Owner: ${name}</h2>
-                <hr style="margin: 15px 0; border: 0; border-top: 1px solid #ddd;">
-                <p><strong>Primary Objective:</strong> Formalize Pod-Leader Authority to achieve a 20% increase in decision velocity.</p>
-                <p style="margin-top: 10px;"><strong>Deliverables:</strong></p>
-                <ul style="margin-left: 20px;">
-                    <li>Signed 'Right-to-Ship' protocols for all Pod Leaders.</li>
-                    <li>Decommissioning of the 'VP Signature' requirement in the workflow.</li>
-                </ul>
-                <p style="margin-top: 10px;"><strong>Evidence Required:</strong> A verified screenshot of the new workflow ledger without bottleneck gates.</p>
-                <button class="btn btn-primary" style="background: #000; color: #fff; margin-top: 20px; width: 100%;" onclick="alert('Directive Sent to ${name}')">Issue Directive</button>
-            </div>
+    function toggleRejection(show) {
+        document.getElementById('rejection-box').style.display = show ? 'block' : 'none';
+    }
+
+    function nextScreen(num) {
+        // Sync values
+        userData.rejection = document.getElementById('rejection-reason').value;
+        userData.actions = document.getElementById('action-log').value;
+        userData.evidence = document.getElementById('evidence-link').value;
+
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById('screen-' + num).classList.add('active');
+
+        if (num === 4) buildReport();
+    }
+
+    function buildReport() {
+        const report = document.getElementById('final-report');
+        const status = userData.rejection ? '<span style="color:red;">BLOCKED (ACTION REQUIRED)</span>' : '<span style="color:green;">VERIFIED RESULT</span>';
+        
+        report.innerHTML = `
+            <label style="color:#888;">Executive Methodology Report</label>
+            <h1 style="margin: 10px 0;">Status: ${status}</h1>
+            <div class="report-section"><strong>Intent:</strong> Horizontal Spend Protocol</div>
+            <div class="report-section"><strong>Human Actions Logged:</strong><br>${userData.actions || 'Negotiation Logged'}</div>
+            <div class="report-section"><strong>Friction/Blockers:</strong><br>${userData.rejection || 'None Identified'}</div>
+            <p style="margin-top:20px; font-size:0.8rem; opacity:0.6;">Evidence ID: ${userData.evidence || 'N/A'}</p>
         `;
-        output.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function sealAndReset() {
+        alert("The Golden Move: Directive Sealed in Executive Ledger.");
+        location.reload();
     }
 </script>
 </body>
