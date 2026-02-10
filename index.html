@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOVALITY | Integrated Master Engine</title>
+    <title>MOVALITY | Sequential Master</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -22,7 +22,7 @@
         header { padding: 30px; text-align: center; border-bottom: 1px solid #222; }
         .logo { font-weight: 900; font-size: 2rem; letter-spacing: 0.8rem; text-transform: uppercase; color: var(--white); }
 
-        #movality-app { max-width: 900px; margin: 40px auto; padding: 20px; }
+        #movality-app { max-width: 900px; margin: 40px auto 120px auto; padding: 20px; }
 
         .screen { display: none; animation: fadeIn 0.3s ease-out forwards; }
         .screen.active { display: block; }
@@ -32,17 +32,20 @@
         .logic-card { background: var(--gunmetal); border: 1px solid #222; padding: 40px; border-radius: 4px; margin-bottom: 20px; }
         label { display: block; text-transform: uppercase; font-size: 0.7rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 0.2rem; }
         
-        input, textarea, select { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; color: white; font-size: 1.1rem; padding: 12px 0; outline: none; margin-bottom: 20px; }
+        input, textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; color: white; font-size: 1.1rem; padding: 12px 0; outline: none; margin-bottom: 20px; }
         
-        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; font-size: 0.8rem; border-radius: 2px; transition: 0.2s; }
+        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; font-size: 0.8rem; border-radius: 2px; transition: 0.2s; margin-top: 10px; }
         .btn-primary { background: var(--white); color: var(--obsidian); }
         .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
-        .btn-back { background: transparent; color: #666; font-size: 0.7rem; border: none; padding: 10px; margin-bottom: 10px; cursor: pointer; }
+        .btn-back { background: transparent; color: #666; font-size: 0.7rem; border: none; cursor: pointer; margin-bottom: 15px; }
 
         .jtbd-white { background: #fff; color: #000; padding: 40px; border-radius: 4px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .report-section { border-bottom: 1px solid #eee; padding: 20px 0; }
+        
+        .check-row { display: flex; align-items: center; margin-bottom: 15px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 4px; }
+        .check-row input[type="checkbox"] { width: auto; margin-right: 15px; margin-bottom: 0; }
+
         .ticker-wrap { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px 0; border-top: 1px solid #1e1e1e; }
-        .ticker { display: inline-block; white-space: nowrap; animation: ticker 40s linear infinite; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; color: var(--steel); }
+        .ticker { display: inline-block; white-space: nowrap; animation: ticker 45s linear infinite; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; color: var(--steel); }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
     </style>
 </head>
@@ -54,130 +57,109 @@
     
     <div id="screen-1" class="screen active">
         <div class="logic-card">
-            <label>Phase 1: Strategic Intent</label>
-            <input type="text" id="master-intent" placeholder="e.g., Restructure Marketing to Horizontal Hierarchy" autofocus>
-            <button class="btn btn-primary" onclick="nextScreen(2)">Evaluate & Ignite</button>
+            <label>Strategic Intent</label>
+            <input type="text" id="master-intent" placeholder="What must be achieved?" autofocus>
+            <button class="btn btn-primary" onclick="goToScreen(2)">Ignite Engine</button>
         </div>
     </div>
 
     <div id="screen-2" class="screen">
-        <button class="btn-back" onclick="nextScreen(1)">← Back to Intent</button>
+        <button class="btn-back" onclick="goToScreen(1)">← Change Intent</button>
         <div class="logic-card">
-            <label>Phase 2: JTBD Issuance</label>
-            <h2>Corrective Move: Establish Peer-to-Peer Gatekeeping</h2>
-            <p style="margin: 20px 0;">Assigned Owner:</p>
-            <input type="text" id="owner-name" placeholder="Enter Accountability Owner (e.g., Sarah Jenkins)">
+            <label>JTBD Issuance</label>
+            <h2>Directive: Establish Peer-to-Peer Gatekeeping</h2>
+            <input type="text" id="owner-name" placeholder="Assigned Owner Name">
             
             <div class="jtbd-white">
-                <p><strong>JTBD Instruction:</strong> Establish peer-to-peer sign-off protocols to eliminate vertical approval bottlenecks by [Date].</p>
+                <p><strong>JTBD:</strong> You are required to dissolve vertical approval bottlenecks by establishing peer-sign-off protocols.</p>
                 <hr style="margin: 20px 0;">
-                <button class="btn btn-primary" onclick="nextScreen(3)">Accept JTBD</button>
-                <button class="btn btn-outline" style="border-color: #000; color: #000; margin-left: 10px;" onclick="toggleNegotiation(true)">Negotiate / Log Blocker</button>
+                <button class="btn btn-primary" onclick="goToScreen(3)">Accept JTBD</button>
+                <button class="btn btn-outline" style="border-color:#000; color:#000; margin-left:10px;" onclick="toggleNeg(true)">Negotiate</button>
                 
-                <div id="negotiation-area" style="display:none; margin-top:20px;">
-                    <label style="color:#666;">Friction / Blocker Narrative</label>
-                    <textarea id="rejection-reason" placeholder="Explain why this move cannot be executed as planned..."></textarea>
-                    <button class="btn btn-primary" style="background: var(--risk); color: white;" onclick="nextScreen(5)">Log Blocker & Escalate</button>
+                <div id="neg-area" style="display:none; margin-top:20px;">
+                    <textarea id="rejection-reason" placeholder="State the blocker..."></textarea>
+                    <button class="btn btn-primary" style="background:var(--risk); color:white;" onclick="goToScreen(5)">Log & Escalate</button>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="screen-3" class="screen">
-        <button class="btn-back" onclick="nextScreen(2)">← Back to Issuance</button>
+        <button class="btn-back" onclick="goToScreen(2)">← Back to JTBD</button>
         <div class="logic-card">
-            <label>Phase 3: Action Ledger</label>
-            <h2 id="ledger-title">Action Log</h2>
-            <p style="margin-bottom: 20px;">Record moves made toward the result.</p>
-            <textarea id="action-log" placeholder="e.g., Move 1: Audited current signature requirements..."></textarea>
-            <button class="btn btn-primary" onclick="nextScreen(4)">Proceed to Verification</button>
+            <label>Action Ledger</label>
+            <h2 id="owner-display">Execution Path</h2>
+            <p style="margin-bottom:20px; font-size:0.9rem;">Complete all 5 moves to verify movement.</p>
+            
+            <div class="check-row"><input type="checkbox" id="m1"> <span>Move 1: Audit existing bottlenecks</span></div>
+            <div class="check-row"><input type="checkbox" id="m2"> <span>Move 2: Draft Peer-to-Peer protocols</span></div>
+            <div class="check-row"><input type="checkbox" id="m3"> <span>Move 3: Secure Pod-Leader buy-in</span></div>
+            <div class="check-row"><input type="checkbox" id="m4"> <span>Move 4: Deploy 'Right-to-Ship' Ledger</span></div>
+            <div class="check-row"><input type="checkbox" id="m5"> <span>Move 5: Decommission legacy signatures</span></div>
+            
+            <button class="btn btn-primary" onclick="goToScreen(4)">Verify Result</button>
         </div>
     </div>
 
     <div id="screen-4" class="screen">
-        <button class="btn-back" onclick="nextScreen(3)">← Back to Ledger</button>
+        <button class="btn-back" onclick="goToScreen(3)">← Back to Ledger</button>
         <div class="logic-card">
-            <label>Phase 4: Evidence & Audit</label>
-            <h2>Verify Move Completion</h2>
-            <input type="text" id="evidence-link" placeholder="Paste Evidence ID or Link">
-            <button class="btn btn-primary" onclick="nextScreen(5)">Generate Methodology Report</button>
+            <label>Evidence Capture</label>
+            <h2>Verification ID</h2>
+            <input type="text" id="evidence-id" placeholder="Evidence ID / Link">
+            <button class="btn btn-primary" onclick="goToScreen(5)">Generate Methodology Report</button>
         </div>
     </div>
 
     <div id="screen-5" class="screen">
-        <button class="btn-back" onclick="nextScreen(4)">← Edit Data</button>
         <div class="jtbd-white" id="final-report"></div>
-        <button class="btn btn-primary" style="margin-top:20px; width: 100%; background: var(--gold);" onclick="location.reload()">The Golden Move: Accept & Seal Ledger</button>
+        <button class="btn btn-primary" style="margin-top:20px; width:100%; background:var(--gold);" onclick="location.reload()">Accept & Seal: Return to Home</button>
     </div>
 
 </main>
 
 <div class="ticker-wrap">
     <div class="ticker">
-        KILL THE SWIRL • LOGIC OVER OPINION • CLARITY IS POWER • INPUT DRIVES OUTPUT • THE LEDGER NEVER LIES
+        KILL THE SWIRL • LOGIC OVER OPINION • CLARITY IS POWER • INPUT DRIVES OUTPUT • MOVEMENT IS THE ONLY METRIC
     </div>
 </div>
 
 <script>
-    let state = {
-        intent: "",
-        owner: "",
-        rejection: "",
-        actions: "",
-        evidence: ""
-    };
+    let data = { intent: "", owner: "", neg: "", evidence: "" };
 
-    function toggleNegotiation(show) {
-        document.getElementById('negotiation-area').style.display = show ? 'block' : 'none';
+    function toggleNeg(show) {
+        document.getElementById('neg-area').style.display = show ? 'block' : 'none';
     }
 
-    function nextScreen(num) {
-        // Capture State
-        state.intent = document.getElementById('master-intent').value;
-        state.owner = document.getElementById('owner-name').value;
-        state.rejection = document.getElementById('rejection-reason').value;
-        state.actions = document.getElementById('action-log').value;
-        state.evidence = document.getElementById('evidence-link').value;
+    function goToScreen(num) {
+        // Sync data
+        data.intent = document.getElementById('master-intent').value;
+        data.owner = document.getElementById('owner-name').value;
+        data.neg = document.getElementById('rejection-reason').value;
+        data.evidence = document.getElementById('evidence-id').value;
 
-        // Dynamic Titles
-        if(state.owner) document.getElementById('ledger-title').innerText = state.owner + " | Action Ledger";
+        if(data.owner) document.getElementById('owner-display').innerText = data.owner + " | Action Ledger";
 
         // Switch
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById('screen-' + num).classList.add('active');
 
         if (num === 5) buildReport();
+        window.scrollTo(0,0);
     }
 
     function buildReport() {
         const report = document.getElementById('final-report');
-        const isBlocked = state.rejection.length > 0;
-        const status = isBlocked ? '<span style="color:red;">BLOCKED (CEO OVERRIDE REQUIRED)</span>' : '<span style="color:green;">VERIFIED RESULT</span>';
+        const blocked = data.neg.length > 0;
+        const status = blocked ? '<span style="color:red;">BLOCKED</span>' : '<span style="color:green;">VERIFIED</span>';
         
         report.innerHTML = `
             <label style="color:#888;">Executive Methodology Report</label>
-            <h1 style="margin: 10px 0;">Strategic Status: ${status}</h1>
-            
-            <div class="report-section">
-                <strong>Strategic Intent:</strong><br>${state.intent || 'Undefined'}
-            </div>
-
-            <div class="report-section">
-                <strong>Owner Performance:</strong><br>${state.owner || 'Unassigned'}
-            </div>
-
-            <div class="report-section">
-                <strong>Recorded Actions / Evidence:</strong><br>${state.actions || 'N/A'}<br>
-                <small>Evidence Ref: ${state.evidence || 'None'}</small>
-            </div>
-
-            <div class="report-section">
-                <strong>Friction / Blockers Logged:</strong><br>${state.rejection || 'No friction detected. Horizontal movement maintained.'}
-            </div>
-
-            <div style="margin-top:20px; font-weight:700;">
-                Recommendation: ${isBlocked ? 'Immediate executive intervention to remove identified blocker.' : 'Institutionalize this move as the new organizational standard.'}
-            </div>
+            <h1 style="margin: 10px 0;">Status: ${status}</h1>
+            <div class="report-section"><strong>Strategic Intent:</strong><br>${data.intent}</div>
+            <div class="report-section"><strong>Owner:</strong><br>${data.owner}</div>
+            <div class="report-section"><strong>Friction/Blockers:</strong><br>${data.neg || 'None'}</div>
+            <p style="margin-top:20px; font-size:0.8rem; opacity:0.6;">Evidence ID: ${data.evidence || 'N/A'}</p>
         `;
     }
 </script>
