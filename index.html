@@ -3,245 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOVALITY | Universal Engine</title>
+    <title>MOVALITY | The Universal Engine</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --sky-blue: #38b6ff; /* Your Landing Page Blue */
+            --sky-blue: #38b6ff;
             --burnished-gold: #D4AF37;
             --deep-midnight: #0f172a;
             --white: #ffffff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--sky-blue); color: var(--white); overflow-x: hidden; min-height: 100vh; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--sky-blue);
-            color: var(--white);
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
+        header { padding: 40px; text-align: center; }
+        .logo { font-weight: 900; font-size: 3.5rem; letter-spacing: 0.5rem; color: var(--burnished-gold); text-transform: uppercase; text-shadow: 2px 4px 10px rgba(0,0,0,0.3); }
 
-        /* Sophisticated Header */
-        header {
-            padding: 40px;
-            text-align: center;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1), transparent);
-        }
-
-        .logo {
-            font-weight: 900;
-            font-size: 3.5rem;
-            letter-spacing: 0.5rem;
-            color: var(--burnished-gold);
-            text-transform: uppercase;
-            text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
-            margin-bottom: 10px;
-        }
-
-        .tagline {
-            font-size: 0.9rem;
-            letter-spacing: 0.2rem;
-            opacity: 0.8;
-            font-weight: 700;
-        }
-
-        /* The Pipeline Container */
-        #movality-app {
-            max-width: 800px;
-            margin: 0 auto 100px auto;
-            padding: 20px;
-        }
+        #movality-app { max-width: 800px; margin: 0 auto 100px auto; padding: 20px; }
 
         .step-container {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-left: 5px solid var(--burnished-gold);
-            padding: 30px;
-            margin-bottom: 20px;
-            border-radius: 0 15px 15px 0;
-            animation: slideIn 0.5s ease forwards;
+            padding: 30px; margin-bottom: 20px; border-radius: 0 15px 15px 0;
+            animation: slideIn 0.3s ease forwards;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        label {
-            display: block;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            font-weight: 900;
-            color: var(--burnished-gold);
-            margin-bottom: 10px;
-        }
+        label { display: block; text-transform: uppercase; font-size: 0.75rem; font-weight: 900; color: var(--burnished-gold); margin-bottom: 10px; }
+        input { width: 100%; background: transparent; border: none; border-bottom: 2px solid rgba(255,255,255,0.3); color: white; font-size: 1.2rem; padding: 10px 0; outline: none; }
+        input:focus { border-bottom-color: var(--burnished-gold); }
 
-        input, textarea {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid rgba(255,255,255,0.3);
-            color: white;
-            font-size: 1.2rem;
-            padding: 10px 0;
-            outline: none;
-            transition: border-color 0.3s;
-        }
+        .btn { padding: 15px 25px; font-weight: 900; text-transform: uppercase; cursor: pointer; border-radius: 5px; border: none; transition: 0.2s; margin-top: 10px; margin-right: 10px; }
+        .btn-primary { background: var(--burnished-gold); color: var(--deep-midnight); }
+        .btn-outline { background: transparent; border: 2px solid var(--burnished-gold); color: var(--burnished-gold); }
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
 
-        input:focus, textarea:focus {
-            border-bottom-color: var(--burnished-gold);
+        /* Ledger Modal */
+        #ledger-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--deep-midnight); z-index: 1000; padding: 50px; overflow-y: auto;
         }
+        .ledger-table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+        .ledger-table th { text-align: left; color: var(--burnished-gold); border-bottom: 1px solid var(--burnished-gold); padding: 15px; }
+        .ledger-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; }
 
-        .btn-primary {
-            background: var(--burnished-gold);
-            color: var(--deep-midnight);
-            border: none;
-            padding: 15px 30px;
-            font-weight: 900;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 20px;
-            transition: transform 0.2s;
-        }
-
-        .btn-primary:hover {
-            transform: scale(1.05);
-        }
-
-        /* Ticker Tape */
-        .ticker-wrap {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: rgba(0,0,0,0.8);
-            padding: 10px 0;
-            overflow: hidden;
-        }
-
-        .ticker {
-            display: inline-block;
-            white-space: nowrap;
-            padding-right: 100%;
-            animation: ticker 30s linear infinite;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.1rem;
-        }
-
-        @keyframes ticker {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-100%, 0, 0); }
-        }
-
+        .ticker-wrap { position: fixed; bottom: 0; width: 100%; background: rgba(0,0,0,0.8); padding: 10px 0; overflow: hidden; }
+        .ticker { display: inline-block; white-space: nowrap; animation: ticker 40s linear infinite; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; }
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         .ticker span { margin-right: 50px; color: var(--burnished-gold); }
-
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo">Movality</div>
-    <div class="tagline">The Universal Pipeline for Decisive Movement</div>
 </header>
 
 <main id="movality-app">
     <div id="intent-screen" class="step-container">
         <label>Primary Intent</label>
-        <input type="text" id="intent-input" placeholder="What is the singular objective?" autofocus>
-        <button class="btn-primary" onclick="startFlow()">Ignite Movement</button>
+        <input type="text" id="intent-input" placeholder="What must be achieved?" autofocus>
+        <button class="btn btn-primary" onclick="startFlow()">Ignite Movement</button>
+        <button class="btn btn-outline" onclick="toggleLedger(true)">View Truth Ledger</button>
     </div>
-
     <div id="tunnel-flow"></div>
 </main>
 
+<div id="ledger-overlay">
+    <h1 style="color: var(--burnished-gold); letter-spacing: 0.3rem;">TRUTH LEDGER</h1>
+    <p style="opacity: 0.6;">Verified Institutional Memory</p>
+    <table class="ledger-table">
+        <thead>
+            <tr><th>DATE</th><th>INTENT</th><th>EVIDENCE ID</th></tr>
+        </thead>
+        <tbody id="ledger-body"></tbody>
+    </table>
+    <button class="btn btn-primary" style="margin-top: 40px;" onclick="toggleLedger(false)">Close Vault</button>
+</div>
+
 <div class="ticker-wrap">
     <div class="ticker">
-        <span>KILL THE SWIRL</span>
-        <span>VELOCITY OVER ACTIVITY</span>
-        <span>CLARITY IS POWER</span>
-        <span>INPUT DRIVES OUTPUT</span>
-        <span>DITCH THE FLUFF</span>
-        <span>THE TRUTH LIVES IN THE LEDGER</span>
+        <span>KILL THE SWIRL</span><span>VELOCITY OVER ACTIVITY</span><span>CLARITY IS POWER</span><span>INPUT DRIVES OUTPUT</span><span>THE LEDGER NEVER LIES</span>
     </div>
 </div>
 
 <script>
     let currentMove = 1;
-    const maxMoves = 5;
-    let flowData = {
-        intent: "",
-        moves: [],
-        evidenceId: ""
-    };
+    let flowData = { intent: "", moves: [], evidenceId: "" };
+    let ledger = JSON.parse(localStorage.getItem('movality_ledger')) || [];
 
     function startFlow() {
         const intent = document.getElementById('intent-input').value;
-        if (!intent) return alert("Intent Required.");
-        
+        if (!intent) return;
         flowData.intent = intent;
         document.getElementById('intent-screen').style.opacity = "0.5";
         document.getElementById('intent-input').disabled = true;
-        
         showNextMove();
     }
 
     function showNextMove() {
-        if (currentMove > maxMoves) {
-            showOutput();
-            return;
-        }
-
+        if (currentMove > 5) { showOutput(); return; }
         const flowContainer = document.getElementById('tunnel-flow');
         const moveDiv = document.createElement('div');
         moveDiv.className = 'step-container';
         moveDiv.innerHTML = `
-            <label>Move ${currentMove} of 5</label>
-            <input type="text" id="move-${currentMove}" placeholder="Enter Actionable Step..." autofocus>
-            <button class="btn-primary" onclick="advanceMove(${currentMove})">Advance Move</button>
+            <label>Move ${currentMove}</label>
+            <input type="text" id="move-${currentMove}" placeholder="Next action..." autofocus>
+            <button class="btn btn-primary" onclick="advanceMove(${currentMove})">Advance</button>
         `;
         flowContainer.appendChild(moveDiv);
         moveDiv.scrollIntoView({ behavior: 'smooth' });
     }
 
-    function advanceMove(moveNum) {
-        const val = document.getElementById(`move-${moveNum}`).value;
-        if (!val) return alert("Action Required.");
-        
+    function advanceMove(num) {
+        const val = document.getElementById(`move-${num}`).value;
+        if (!val) return;
         flowData.moves.push(val);
-        const currentBtn = event.target;
-        currentBtn.style.display = 'none';
-        document.getElementById(`move-${moveNum}`).disabled = true;
-        
+        event.target.style.display = 'none';
+        document.getElementById(`move-${num}`).disabled = true;
         currentMove++;
         showNextMove();
     }
 
     function showOutput() {
-        const flowContainer = document.getElementById('tunnel-flow');
-        const evidenceId = "MV-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+        const id = "MV-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+        flowData.evidenceId = id;
         
+        // Save to Ledger
+        ledger.push({ date: new Date().toLocaleDateString(), intent: flowData.intent, id: id });
+        localStorage.setItem('movality_ledger', JSON.stringify(ledger));
+
         const outputDiv = document.createElement('div');
         outputDiv.className = 'step-container';
-        outputDiv.style.borderColor = "white";
+        outputDiv.style.borderLeftColor = "white";
         outputDiv.innerHTML = `
-            <label>Final Truth Statement (Output)</label>
-            <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 20px;">
-                Intent: ${flowData.intent}
-            </div>
-            <p style="opacity: 0.8; margin-bottom: 20px;">Movement successfully refined through 5 verified steps.</p>
-            <div style="background: var(--burnished-gold); color: var(--deep-midnight); padding: 15px; font-weight: 900; text-align: center; border-radius: 5px;">
-                EVIDENCE ID: ${evidenceId}
-            </div>
-            <button class="btn-primary" style="width: 100%; margin-top: 20px;" onclick="location.reload()">New Movement</button>
+            <label>Movement Verified</label>
+            <h2 style="margin-bottom:20px;">${id}</h2>
+            <button class="btn btn-primary" onclick="copyId('${id}')">Share Evidence ID</button>
+            <button class="btn btn-outline" onclick="toggleLedger(true)">View Truth Ledger</button>
+            <button class="btn btn-primary" style="background:white;" onclick="location.reload()">Start New</button>
         `;
-        flowContainer.appendChild(outputDiv);
+        document.getElementById('tunnel-flow').appendChild(outputDiv);
         outputDiv.scrollIntoView({ behavior: 'smooth' });
     }
-</script>
 
+    function copyId(id) {
+        navigator.clipboard.writeText(id);
+        alert("Evidence ID Copied: " + id);
+    }
+
+    function toggleLedger(show) {
+        const overlay = document.getElementById('ledger-overlay');
+        const body = document.getElementById('ledger-body');
+        if (show) {
+            body.innerHTML = ledger.map(item => `
+                <tr><td>${item.date}</td><td>${item.intent}</td><td><strong>${item.id}</strong></td></tr>
+            `).join('');
+            overlay.style.display = 'block';
+        } else {
+            overlay.style.display = 'none';
+        }
+    }
+</script>
 </body>
 </html>
