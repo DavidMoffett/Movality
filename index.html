@@ -3,72 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movality OS | v23.1</title>
+    <title>Movality OS | v23.2</title>
     <style>
         :root {
             --bg-top: #0f172a; --bg-bottom: #1e3a8a; 
-            --gold: #FACC15; --white: #FFFFFF; --danger: #ef4444; --verify: #10b981;
+            --gold: #FACC15; --white: #FFFFFF; --danger: #ef4444; --verify: #10b981; --pause: #64748b;
             --glass: rgba(255, 255, 255, 0.1);
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%); color: var(--white); height: 100vh; overflow: hidden; display: flex; justify-content: center; }
-
         #velocimeter { position: fixed; top: 0; left: 0; height: 6px; background: var(--gold); width: 0%; z-index: 2000; transition: width 1s linear; }
-        
         #ui-wrapper { width: 100%; max-width: 500px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 2rem 1.5rem; }
         .screen { display: none; flex-direction: column; height: 100%; }
         .screen.active { display: flex; }
-
-        /* Fixed Top Stats */
         .top-stats { display: flex; justify-content: space-around; padding: 1rem; background: var(--glass); border-radius: 12px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1); }
-        
         h1 { font-size: 2.8rem; font-weight: 900; letter-spacing: 0.3em; text-align: center; margin-top: 1.5rem; }
         .move-status { text-align: center; font-size: 0.7rem; font-weight: 900; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 1.5rem; }
-
         .instruction { letter-spacing: 0.15em; font-size: 0.6rem; text-transform: uppercase; margin-bottom: 0.5rem; font-weight: 900; color: var(--gold); text-align: center; }
-        
-        /* Balanced Repository Grid */
-        .vault-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 1.5rem 0; flex-grow: 0; }
-        .vault-item { padding: 15px 5px; border: 1px solid rgba(255,255,255,0.2); font-size: 0.6rem; font-weight: 900; text-align: center; cursor: pointer; text-transform: uppercase; background: rgba(255,255,255,0.03); }
-        .vault-item span { outline: none; }
+        .vault-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 1.5rem 0; }
+        .vault-item { padding: 15px 5px; border: 1px solid rgba(255,255,255,0.2); font-size: 0.6rem; font-weight: 900; text-align: center; cursor: pointer; text-transform: uppercase; background: rgba(255,255,255,0.03); transition: 0.3s; }
         .vault-item.selected { background: var(--gold); color: #000; border-color: var(--gold); }
-
-        /* Actions */
         .btn-main { background: var(--gold); color: #000; padding: 1.2rem; font-weight: 900; text-transform: uppercase; border-radius: 50px; border: none; cursor: pointer; letter-spacing: 0.1em; width: 100%; margin-top: 1rem; }
         .btn-ghost { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.3); padding: 0.8rem; border-radius: 50px; font-weight: 900; text-transform: uppercase; cursor: pointer; font-size: 0.7rem; width: 100%; margin-top: 0.5rem; }
-        
+        .btn-pause { background: var(--pause); color: white; border: none; padding: 0.8rem; border-radius: 50px; font-weight: 900; text-transform: uppercase; cursor: pointer; font-size: 0.7rem; width: 100%; margin-top: 0.5rem; }
         textarea, input { width: 100%; background: rgba(255,255,255,0.05); border: none; border-bottom: 2px solid var(--gold); color: var(--white); padding: 1rem; font-size: 1.1rem; font-weight: 700; text-align: center; outline: none; margin-bottom: 1rem; }
         .verification-card { background: var(--glass); border-left: 4px solid var(--gold); padding: 1.2rem; text-align: left; margin-bottom: 1rem; border-radius: 6px; }
     </style>
 </head>
 <body>
-
     <div id="velocimeter"></div>
-
     <div id="ui-wrapper">
-        
         <section id="screen-landing" class="screen active">
-            <div class="top-stats">
-                <div>Rel: <span style="color:var(--gold)">98%</span></div>
-                <div>Vel: <span style="color:var(--gold)">38M</span></div>
-            </div>
-            
+            <div class="top-stats"><div>Rel: <span style="color:var(--gold)">98%</span></div><div>Vel: <span style="color:var(--gold)">38M</span></div></div>
             <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
                 <h1>MOVALITY</h1>
-                <p class="move-status">MOVE STATUS: IDLE</p>
-                
-                <p class="instruction">Sovereign Repositories (Edit Labels)</p>
+                <p id="main-status" class="move-status">MOVE STATUS: IDLE</p>
+                <p class="instruction">Sovereign Repositories</p>
                 <div class="vault-grid" id="main-vault-grid"></div>
             </div>
-
             <div style="margin-bottom: 1rem;">
                 <button class="btn-main" onclick="navigate('ignition')">IGNITION</button>
                 <button class="btn-ghost" onclick="showVerificationQueue()" id="v-btn">VERIFICATION QUEUE (0)</button>
-                <div style="display: flex; gap: 8px; margin-top: 8px;">
-                    <button class="btn-ghost" onclick="alert('Archive Access')">ARCHIVE</button>
-                    <button class="btn-ghost" onclick="alert('Paused Access')">PAUSED</button>
-                </div>
             </div>
         </section>
 
@@ -76,11 +51,12 @@
             <div class="top-stats"><span>SHAKER / IGNITION</span></div>
             <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
                 <p class="instruction">Define Sovereign Intent</p>
-                <input type="text" id="ignite-intent" placeholder="The Sovereign Objective">
-                <p class="instruction">Set Time Contract (Minutes)</p>
+                <input type="text" id="ignite-intent" placeholder="The Objective">
+                <p class="instruction">Time Contract (Min)</p>
                 <input type="number" id="ignite-time" placeholder="45">
             </div>
             <button class="btn-main" onclick="commitIgnition()">ENGAGE TUNNEL</button>
+            <button class="btn-pause" onclick="pauseToggle()">PAUSE MOVEMENT</button>
             <button class="btn-ghost" onclick="navigate('landing')">ABORT</button>
         </section>
 
@@ -88,53 +64,55 @@
             <div class="top-stats"><span>MOVER / TUNNEL</span></div>
             <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
                 <p id="tunnel-label" class="instruction">Move 1: Setup</p>
-                <textarea id="tunnel-input" rows="5" placeholder="Documenting movement..."></textarea>
+                <textarea id="tunnel-input" rows="5" placeholder="Documenting..."></textarea>
             </div>
             <button class="btn-main" onclick="nextMove()">ADVANCE MOVE</button>
-            <button class="btn-ghost" style="border-color: var(--danger)" onclick="alert('Dissonance logged')">FLAG DISSONANCE</button>
+            <button class="btn-pause" onclick="pauseToggle()">PAUSE MOVEMENT</button>
         </section>
 
         <section id="screen-evidence" class="screen">
             <div class="top-stats"><span>MOVER / AUDIT</span></div>
             <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
                 <p class="instruction">Truth Statement</p>
-                <textarea id="truth-statement" rows="3" placeholder="Single sentence of success."></textarea>
+                <textarea id="truth-statement" rows="3" placeholder="Result verified."></textarea>
                 <p class="instruction">Evidence / Proof Link</p>
                 <input type="text" id="proof-link" placeholder="Evidence ID">
             </div>
             <button class="btn-main" onclick="vaultMove()">SHIP TO SHAKER</button>
+            <button class="btn-pause" onclick="pauseToggle()">PAUSE MOVEMENT</button>
         </section>
 
         <section id="screen-verify" class="screen">
             <div class="top-stats"><span>SHAKER / VERIFY</span></div>
             <div id="v-list" style="flex-grow: 1; overflow-y: auto; padding-top: 1rem;"></div>
-            <button class="btn-ghost" onclick="navigate('landing')">RETURN TO FLEET</button>
+            <button class="btn-ghost" onclick="navigate('landing')">RETURN TO COMMAND</button>
         </section>
-
     </div>
 
     <script>
-        let labels = ["Transactions", "Comm", "Decisions", "Creative", "Doc", "Audits"];
+        // EDIT THESE 6 NAMES TO LOCK THEM IN PERMANENTLY
+        let labels = ["My Notes", "Comm", "Decisions", "Creative", "Legal", "Audits"];
+        
         let vQueue = [];
         let active = null;
         let selectedVaultIndex = 0;
         let timer;
+        let isPaused = false;
+        let startTime;
+        let pausedTime = 0;
 
         function init() {
             renderVaults();
-            document.getElementById('v-btn').innerText = `VERIFICATION QUEUE (${vQueue.length})`;
+            updateQueueCount();
         }
 
         function renderVaults() {
             const grid = document.getElementById('main-vault-grid');
             grid.innerHTML = labels.map((l, i) => `
-                <div class="vault-item ${i === selectedVaultIndex ? 'selected' : ''}" onclick="selectVault(${i})">
-                    <span contenteditable="true" onblur="updateLabel(${i}, this)" onclick="event.stopPropagation()">${l}</span>
-                </div>
+                <div class="vault-item ${i === selectedVaultIndex ? 'selected' : ''}" onclick="selectVault(${i})">${l}</div>
             `).join('');
         }
 
-        function updateLabel(index, el) { labels[index] = el.innerText; renderVaults(); }
         function selectVault(i) { selectedVaultIndex = i; renderVaults(); }
 
         function navigate(id) {
@@ -142,11 +120,29 @@
             document.getElementById('screen-' + id).classList.add('active');
         }
 
+        function pauseToggle() {
+            isPaused = !isPaused;
+            const status = document.getElementById('main-status');
+            if (isPaused) {
+                clearInterval(timer);
+                pausedTime = Date.now() - startTime;
+                status.innerText = "MOVE STATUS: PAUSED";
+                status.style.color = "var(--pause)";
+            } else {
+                startTime = Date.now() - pausedTime;
+                startTimer();
+                status.innerText = "MOVE STATUS: ACTIVE";
+                status.style.color = "var(--gold)";
+            }
+        }
+
         function commitIgnition() {
             const intent = document.getElementById('ignite-intent').value;
             const time = document.getElementById('ignite-time').value;
             if(!intent || !time) return;
             active = { intent, target: time, vault: labels[selectedVaultIndex], stage: 1, steps: [] };
+            startTime = Date.now();
+            document.getElementById('main-status').innerText = "MOVE STATUS: ACTIVE";
             navigate('tunnel');
             startTimer();
         }
@@ -165,12 +161,17 @@
         function vaultMove() {
             active.truth = document.getElementById('truth-statement').value;
             active.proof = document.getElementById('proof-link').value;
-            vQueue.push(active);
+            vQueue.push({...active});
             active = null;
             clearInterval(timer);
             document.getElementById('velocimeter').style.width = '0%';
+            document.getElementById('main-status').innerText = "MOVE STATUS: IDLE";
             navigate('landing');
-            init();
+            updateQueueCount();
+        }
+
+        function updateQueueCount() {
+            document.getElementById('v-btn').innerText = `VERIFICATION QUEUE (${vQueue.length})`;
         }
 
         function showVerificationQueue() {
@@ -180,19 +181,19 @@
                 <div class="verification-card">
                     <p class="instruction">${v.vault}</p>
                     <h2 style="font-size:1.1rem; margin-bottom:0.4rem">${v.intent}</h2>
-                    <p style="font-size:0.8rem; opacity:0.8">${v.truth}</p>
+                    <p style="font-size:0.8rem; margin-bottom:0.5rem"><strong>TRUTH:</strong> ${v.truth}</p>
+                    <p style="font-size:0.7rem; opacity:0.7"><strong>PROOF:</strong> ${v.proof}</p>
                     <div style="display:flex; gap:10px; margin-top:1rem">
-                        <button class="btn-main" style="padding:0.6rem; font-size:0.7rem; background:var(--verify)" onclick="vQueue.splice(${i},1); navigate('landing'); init();">VERIFY</button>
-                        <button class="btn-ghost" style="padding:0.6rem; font-size:0.7rem; border-color:var(--danger)" onclick="vQueue.splice(${i},1); showVerificationQueue();">RECYCLE</button>
+                        <button class="btn-main" style="padding:0.6rem; font-size:0.7rem; background:var(--verify)" onclick="vQueue.splice(${i},1); navigate('landing'); updateQueueCount();">VERIFY</button>
+                        <button class="btn-ghost" style="padding:0.6rem; font-size:0.7rem; border-color:var(--danger)" onclick="vQueue.splice(${i},1); showVerificationQueue(); updateQueueCount();">RECYCLE</button>
                     </div>
                 </div>
             `).join('') : "<p class='instruction'>Queue Empty</p>";
         }
 
         function startTimer() {
-            let start = Date.now();
             timer = setInterval(() => {
-                let elapsed = (Date.now() - start) / 1000 / 60;
+                let elapsed = (Date.now() - startTime) / 1000 / 60;
                 let p = (elapsed / active.target) * 100;
                 document.getElementById('velocimeter').style.width = Math.min(p, 100) + "%";
             }, 1000);
