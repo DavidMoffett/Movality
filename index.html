@@ -2,305 +2,247 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELOCIMOVE | v45.0 STRATEGIC FLIGHT DECK</title>
+    <title>VELOCIMOVE | v48.0 INDUSTRIAL MISSION CONTROL</title>
     <style>
         :root {
-            --industrial-black: #050505;
-            --velocity-gold: #d4af37;
-            --thrust-green: #00ff41;
-            --drag-red: #ff3e3e;
-            --logic-blue: #00d4ff;
-            --panel-bg: #0d0d0d;
-            --border-glow: rgba(212, 175, 55, 0.2);
+            --bg: #020202;
+            --gold: #d4af37;
+            --green: #00ff41;
+            --blue: #00d4ff;
+            --panel: #0a0a0a;
+            --border: #1a1a1a;
+            --dim-text: #444;
         }
-
         body, html {
-            background-color: var(--industrial-black);
+            background: var(--bg);
             color: #eee;
             font-family: 'Inter', 'Segoe UI', 'Courier New', monospace;
             margin: 0;
-            padding: 0;
             height: 100vh;
             width: 100vw;
             overflow: hidden;
+            letter-spacing: 1px;
+        }
+        .flight-deck {
+            display: grid;
+            grid-template-columns: 380px 1fr 420px;
+            height: 100vh;
+            border: 4px solid var(--border);
+            box-sizing: border-box;
+        }
+
+        /* --- LEFT SIDE: THE 8-PHASE ENGINE --- */
+        .sidebar {
+            background: var(--panel);
+            border-right: 2px solid var(--border);
+            padding: 40px 30px;
             display: flex;
             flex-direction: column;
         }
-
-        /* --- GLOBAL HEADER --- */
-        header {
-            height: 60px;
-            background: linear-gradient(to right, #111, #000);
-            border-bottom: 2px solid #222;
-            display: flex;
-            align-items: center;
-            padding: 0 30px;
-            justify-content: space-between;
+        .brand-header {
+            color: var(--gold);
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 6px;
+            margin-bottom: 50px;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 15px;
+            text-align: center;
         }
-
-        .brand { font-size: 1.4rem; font-weight: 800; color: var(--velocity-gold); letter-spacing: 4px; }
-        .version-tag { font-size: 0.7rem; border: 1px solid var(--velocity-gold); padding: 2px 10px; border-radius: 2px; }
-
-        /* --- MAIN LAYOUT --- */
-        .workspace {
-            display: grid;
-            grid-template-columns: 380px 1fr 420px;
-            flex-grow: 1;
-        }
-
-        /* LEFT: THE 8-PHASE ENGINE */
-        #phase-engine {
-            background: var(--panel-bg);
-            border-right: 2px solid #222;
-            padding: 30px;
-            overflow-y: auto;
-        }
-
         .phase-node {
-            background: #111;
-            border: 1px solid #222;
-            padding: 20px;
+            padding: 22px;
+            border: 1px solid #1a1a1a;
             margin-bottom: 15px;
-            font-size: 0.85rem;
-            color: #444;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.9rem;
+            color: var(--dim-text);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             position: relative;
+            background: #080808;
         }
-
         .phase-node.active {
-            border-color: var(--velocity-gold);
+            border-color: var(--gold);
             color: #fff;
-            background: rgba(212, 175, 55, 0.05);
-            box-shadow: 0 0 15px var(--border-glow);
-            transform: scale(1.02);
+            background: rgba(212, 175, 55, 0.1);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
+            transform: scale(1.05);
+            z-index: 10;
         }
-
         .phase-node.complete {
-            border-color: var(--thrust-green);
-            color: var(--thrust-green);
+            border-color: var(--green);
+            color: var(--green);
+            background: rgba(0, 255, 65, 0.05);
         }
-
         .phase-node.complete::after {
-            content: "✓ VERIFIED";
+            content: "ARCHIVED";
             position: absolute;
             right: 15px;
             font-size: 0.6rem;
-            letter-spacing: 1px;
+            opacity: 0.8;
+            letter-spacing: 2px;
         }
 
-        /* CENTER: TELEMETRY HUD */
-        .telemetry-hub {
-            background: radial-gradient(circle at center, #111 0%, #000 100%);
+        /* --- CENTER: KINETIC TELEMETRY --- */
+        .main-hud {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            background: radial-gradient(circle at center, #151515 0%, #000 100%);
+            border-right: 2px solid var(--border);
             position: relative;
         }
-
-        .velocity-gauge {
-            text-align: center;
-            z-index: 10;
-        }
-
-        #throughput-val {
-            font-size: 10rem;
-            font-weight: 900;
-            color: var(--thrust-green);
-            margin: 0;
-            line-height: 0.8;
-            letter-spacing: -5px;
-        }
-
-        .sub-label {
-            color: var(--velocity-gold);
+        .label {
+            color: var(--gold);
             text-transform: uppercase;
             letter-spacing: 10px;
             font-size: 1rem;
-            margin-top: 10px;
+            margin-bottom: 30px;
         }
-
-        #status-display {
-            margin-top: 50px;
-            border: 1px solid var(--logic-blue);
-            padding: 15px 40px;
-            color: var(--logic-blue);
-            font-size: 0.9rem;
+        #propulsion-gauge {
+            font-size: 12rem;
+            font-weight: 900;
+            color: var(--green);
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            line-height: 1;
+            text-shadow: 0 0 50px rgba(0,255,65,0.2);
+            transition: color 1s;
+        }
+        #status-bar {
+            border: 2px solid var(--blue);
+            padding: 20px 80px;
+            margin-top: 60px;
+            font-size: 1.1rem;
+            color: var(--blue);
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 5px;
+            transition: all 0.8s;
+            background: rgba(0, 212, 255, 0.05);
         }
 
-        /* RIGHT: FORENSIC LEDGER */
-        #forensic-ledger {
-            background: var(--panel-bg);
-            border-left: 2px solid #222;
-            padding: 30px;
+        /* --- RIGHT SIDE: FORENSIC LEDGER --- */
+        .ledger {
+            background: var(--panel);
+            padding: 40px 30px;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
-
         .ledger-stream {
             flex-grow: 1;
-            overflow-y: hidden;
+            overflow: hidden;
             font-family: 'Courier New', monospace;
-            font-size: 0.75rem;
+            border-top: 1px solid #333;
+            margin-top: 10px;
         }
-
         .entry {
-            padding: 12px 0;
+            font-size: 0.8rem;
+            padding: 15px 0;
             border-bottom: 1px solid #1a1a1a;
-            color: #888;
+            color: #777;
             animation: slideIn 0.3s ease-out;
         }
-
-        .ev-id { color: var(--velocity-gold); font-weight: bold; margin-right: 10px; }
-        .ev-type { color: var(--logic-blue); margin-right: 10px; }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .footer-action {
-            margin-top: 20px;
-            border-top: 1px solid #333;
-            padding-top: 20px;
-        }
-
-        #seal-button {
-            width: 100%;
-            background: transparent;
-            border: 1px solid #444;
-            color: #444;
-            padding: 15px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: bold;
-        }
-
-        #seal-button.locked {
-            border-color: var(--thrust-green);
-            color: var(--thrust-green);
-        }
+        .ev-id { color: var(--gold); font-weight: bold; margin-right: 15px; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="brand">VELOCIMOVE</div>
-        <div class="version-tag">INDUSTRIAL ARCHITECTURE v45.0</div>
-    </header>
-
-    <div class="workspace">
-        <section id="phase-engine">
-            <div id="p1" class="phase-node">01 STRATEGIC INTENT</div>
-            <div id="p2" class="phase-node">02 LOGIC SYNTHESIS</div>
-            <div id="p3" class="phase-node">03 THE LOGIC GATE</div>
-            <div id="p4" class="phase-node">04 R-A-I ASSIGNMENT</div>
-            <div id="p5" class="phase-node">05 ACTION LEDGER</div>
-            <div id="p6" class="phase-node">06 VELOCITY AUDIT</div>
-            <div id="p7" class="phase-node">07 SUCCESSION LOOP</div>
-            <div id="p8" class="phase-node">08 EXECUTIVE RESOLUTION</div>
+    <div class="flight-deck">
+        <section class="sidebar">
+            <div class="brand-header">VELOCIMOVE</div>
+            <div id="ph1" class="phase-node">01 STRATEGIC INTENT</div>
+            <div id="ph2" class="phase-node">02 LOGIC SYNTHESIS</div>
+            <div id="ph3" class="phase-node">03 THE LOGIC GATE</div>
+            <div id="ph4" class="phase-node">04 R-A-I ASSIGNMENT</div>
+            <div id="ph5" class="phase-node">05 ACTION LEDGER</div>
+            <div id="ph6" class="phase-node">06 VELOCITY AUDIT</div>
+            <div id="ph7" class="phase-node">07 SUCCESSION LOOP</div>
+            <div id="ph8" class="phase-node">08 EXECUTIVE RESOLUTION</div>
         </section>
 
-        <section class="telemetry-hub">
-            <div class="velocity-gauge">
-                <div class="sub-label">System Throughput</div>
-                <h1 id="throughput-val">0%</h1>
-            </div>
-            <div id="status-display">INITIALIZING SUCCESSION MASTER...</div>
+        <section class="main-hud">
+            <div class="label">Mission Propulsion</div>
+            <div id="propulsion-gauge">0%</div>
+            <div id="status-bar">AUTHENTICATING...</div>
         </section>
 
-        <section id="forensic-ledger">
-            <div class="sub-label" style="font-size: 0.7rem; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px;">Forensic Evidence Stream</div>
+        <section class="ledger">
+            <div class="label" style="font-size: 0.8rem; letter-spacing: 4px;">Forensic Ledger</div>
             <div id="ledger-stream" class="ledger-stream"></div>
-            <div class="footer-action">
-                <button id="seal-button">CEO RESOLUTION PENDING</button>
-            </div>
         </section>
     </div>
 
 <script>
-    const VelocimoveEngine = {
-        state: {
-            phase: 1,
-            throughput: 0,
-            evidence: 0,
-            isResolved: false
-        },
-
-        phases: ["p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8"],
+    const VELOCIMOVE = {
+        current: 1,
+        thrust: 0,
+        map: ["ph1", "ph2", "ph3", "ph4", "ph5", "ph6", "ph7", "ph8"],
 
         init() {
-            this.addEntry("SYSTEM", "Industrial Logic Engine Online.");
-            this.run();
+            this.log("CORE", "V48.0 PROPULSION ENGINE ACTIVATED");
+            this.propulsionDrive();
         },
 
-        addEntry(type, msg) {
-            const stream = document.getElementById('ledger-stream');
-            const entry = document.createElement('div');
-            entry.className = 'entry';
-            const id = "VM-" + Math.floor(Math.random() * 9000 + 1000);
-            entry.innerHTML = `<span class="ev-id">${id}</span><span class="ev-type">[${type}]</span>${msg}`;
-            stream.insertBefore(entry, stream.firstChild);
+        updateHUD() {
+            // Force Sidebar States
+            this.map.forEach((id, index) => {
+                const el = document.getElementById(id);
+                el.classList.remove('active', 'complete');
+                if (index + 1 < this.current) el.classList.add('complete');
+                else if (index + 1 === this.current) el.classList.add('active');
+            });
+
+            // Force Gauge
+            document.getElementById('propulsion-gauge').innerText = this.thrust + "%";
             
-            this.state.evidence++;
-            // Advance phase based on throughput milestones
-            if (this.state.evidence % 5 === 0) this.advance();
-        },
-
-        advance() {
-            if (this.state.phase < 8) {
-                this.state.phase++;
-                this.updatePhases();
-                this.addEntry("SUCCESSION", `Phase ${this.state.phase} Logic Synthesis complete.`);
+            // Check for Terminal Resolution
+            if (this.current === 8) {
+                const bar = document.getElementById('status-bar');
+                bar.innerText = "CEO SEAL AFFIXED - MISSION CLOSED";
+                bar.style.borderColor = "var(--green)";
+                bar.style.color = "var(--green)";
+                bar.style.background = "rgba(0, 255, 65, 0.1)";
+                document.getElementById('propulsion-gauge').style.color = "var(--blue)";
+            } else {
+                document.getElementById('status-bar').innerText = `EXECUTING PHASE 0${this.current}`;
             }
         },
 
-        updatePhases() {
-            this.phases.forEach((id, i) => {
-                const el = document.getElementById(id);
-                el.classList.remove('active', 'complete');
-                if (i + 1 < this.state.phase) el.classList.add('complete');
-                else if (i + 1 === this.state.phase) el.classList.add('active');
-            });
-
-            if (this.state.phase === 8) this.resolveMission();
+        log(type, msg) {
+            const stream = document.getElementById('ledger-stream');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            const id = "VM-" + Math.floor(Math.random() * 900000 + 100000);
+            entry.innerHTML = `<span class="ev-id">${id}</span> [${type}] ${msg}`;
+            stream.insertBefore(entry, stream.firstChild);
         },
 
-        resolveMission() {
-            this.state.isResolved = true;
-            document.getElementById('status-display').innerText = "MISSION CLOSED - PERMANENT ARCHIVE LOCK";
-            document.getElementById('status-display').style.color = "var(--thrust-green)";
-            document.getElementById('status-display').style.borderColor = "var(--thrust-green)";
-            
-            const btn = document.getElementById('seal-button');
-            btn.innerText = "CEO SEAL AFFIXED";
-            btn.classList.add('locked');
-            
-            document.getElementById('throughput-val').style.color = "var(--logic-blue)";
-        },
+        propulsionDrive() {
+            // The Mechanical Heartbeat: Driven by a master timer.
+            const engineInterval = setInterval(() => {
+                if (this.thrust < 100) {
+                    this.thrust += 1;
+                    
+                    // Logic: Every 12.5% propulsion thrust, advance to the next phase node.
+                    if (this.thrust % 12 === 0 && this.current < 8) {
+                        this.current++;
+                        this.log("SUCCESSION", `PHASE 0${this.current} LOGIC SYNTHESIS LOCKED`);
+                    }
 
-        run() {
-            this.updatePhases();
-            const mainLoop = setInterval(() => {
-                if (this.state.throughput < 100) {
-                    this.state.throughput += Math.floor(Math.random() * 3) + 1;
-                    if (this.state.throughput > 100) this.state.throughput = 100;
-                    
-                    document.getElementById('throughput-val').innerText = this.state.throughput + "%";
-                    document.getElementById('status-display').innerText = `EXECUTING PHASE 0${this.state.phase}...`;
-                    
-                    this.addEntry("TELEMETRY", `Throughput calibrated at ${this.state.throughput}%`);
+                    if (this.thrust % 4 === 0) {
+                        this.log("TELEMETRY", `NODE SYNC STABLE AT ${this.thrust}%`);
+                    }
+
+                    this.updateHUD();
                 } else {
-                    clearInterval(mainLoop);
+                    this.log("ARCHIVE", "EXECUTIVE RESOLUTION GENERATED. LOCKING RECORD.");
+                    clearInterval(engineInterval);
                 }
-            }, 1500);
+            }, 750); // Completes the 1-8 cycle in exactly 75 seconds.
         }
     };
 
-    window.onload = () => VelocimoveEngine.init();
+    window.onload = () => VELOCIMOVE.init();
 </script>
 </body>
 </html>
