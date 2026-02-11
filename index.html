@@ -3,31 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOVALITY | Master Engine</title>
+    <title>MOVALITY | Executive Horizon</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --obsidian: #050505; --gunmetal: #121212; --accent: #38b6ff;
-            --white: #ffffff; --gold: #d4af37; --risk: #ef4444; --success: #10b981;
+            --obsidian: #050505; --gunmetal: #111112; --charcoal: #1a1a1b;
+            --accent: #38b6ff; --white: #ffffff; --gold: #d4af37;
+            --risk: #ef4444; --success: #10b981; --steel: #64748b;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--obsidian); color: #ccc; line-height: 1.6; }
         header { padding: 40px; text-align: center; border-bottom: 1px solid #222; }
         .logo { font-weight: 900; font-size: 2.5rem; letter-spacing: 0.8rem; text-transform: uppercase; color: var(--white); }
-        #movality-app { max-width: 900px; margin: 40px auto 150px auto; padding: 20px; }
-        .screen { display: none; animation: fadeIn 0.4s ease-out forwards; }
+        #movality-app { max-width: 950px; margin: 40px auto 150px auto; padding: 0 20px; }
+        .screen { display: none; animation: slideUp 0.4s ease-out forwards; }
         .screen.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .logic-card { background: var(--gunmetal); border: 1px solid #222; padding: 40px; border-radius: 4px; margin-bottom: 20px; }
-        label { display: block; text-transform: uppercase; font-size: 0.7rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 0.2rem; }
-        input, textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; color: white; font-size: 1.2rem; padding: 12px 0; outline: none; margin-bottom: 20px; }
-        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; font-size: 0.8rem; border-radius: 2px; transition: 0.2s; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .logic-card { background: var(--gunmetal); border: 1px solid #222; padding: 50px; border-radius: 4px; margin-bottom: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        label { display: block; text-transform: uppercase; font-size: 0.75rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 0.2rem; }
+        input, textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; color: white; font-size: 1.2rem; padding: 12px 0; outline: none; margin-bottom: 25px; transition: 0.3s; }
+        input:focus { border-bottom-color: var(--accent); }
+        .btn { padding: 20px 40px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; font-size: 0.85rem; border-radius: 2px; transition: 0.3s; }
         .btn-primary { background: var(--white); color: var(--obsidian); }
-        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
-        .btn-back { background: transparent; color: #666; font-size: 0.7rem; border: none; cursor: pointer; margin-bottom: 15px; }
-        .jtbd-white { background: #fff; color: #000; padding: 40px; border-radius: 4px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .report-section { border-bottom: 1px solid #eee; padding: 15px 0; }
-        .move-row { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 4px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid var(--accent); }
+        .btn-gold { background: var(--gold); color: black; width: 100%; margin-top: 30px; font-size: 1rem; }
+        .jtbd-white { background: #fff; color: #000; padding: 60px; border-radius: 4px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
+        .section-break { border-bottom: 1px solid #eee; padding: 25px 0; }
+        .evidence-tag { background: #f0f9ff; border: 1px solid #bae6fd; padding: 15px; border-radius: 4px; display: inline-block; font-family: monospace; font-weight: 900; color: #0369a1; }
+        .check-item { display: flex; align-items: center; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 4px; margin-bottom: 10px; }
+        .check-item input { width: auto; margin-right: 20px; margin-bottom: 0; }
     </style>
 </head>
 <body>
@@ -37,97 +40,96 @@
 <main id="movality-app">
     <div id="step-1" class="screen active">
         <div class="logic-card">
-            <label>Strategic Intent</label>
-            <input type="text" id="m-intent" placeholder="Define the Strategic Mission..." autofocus>
-            <button class="btn btn-primary" onclick="ignite()">Evaluate & Architect</button>
+            <label>Phase 1: Strategic Intent</label>
+            <input type="text" id="m-intent" placeholder="What is the mission?" autofocus>
+            <button class="btn btn-primary" onclick="nav(2)">Evaluate Logic</button>
         </div>
     </div>
 
     <div id="step-2" class="screen">
-        <button class="btn-back" onclick="switchScreen(1)">← Back</button>
         <div class="logic-card">
-            <label>Phase 2: Engine Synthesis | Success Prediction: +40% Velocity</label>
-            <div id="m-moves"></div>
-            <div id="m-dissonance"></div>
-            <button class="btn btn-primary" onclick="switchScreen(3)">Accept Logic & Issue Directives</button>
-        </div>
-    </div>
-
-    <div id="step-3" class="screen">
-        <button class="btn-back" onclick="switchScreen(2)">← Back</button>
-        <div class="logic-card">
-            <label>Phase 3: Execution Directive</label>
-            <input type="text" id="m-owner" placeholder="Assign Delivery Owner (e.g. Sarah Jenkins)">
+            <label>Phase 2: Architectural Directive</label>
+            <p style="color:var(--success); font-weight:900; margin-bottom:30px;">[ ENGINE SYNTHESIS COMPLETE: +40% PREDICTED VELOCITY ]</p>
             <div class="jtbd-white">
-                <p><strong>JTBD:</strong> You must dissolve middle-management approval gates and establish peer-to-peer sign-off protocols to achieve horizontal velocity.</p>
-                <hr style="margin:20px 0;">
-                <button class="btn btn-primary" onclick="switchScreen(4)">Accept & Execute</button>
-                <button class="btn btn-outline" style="border-color:#000; color:#000; margin-left:10px;" onclick="showNeg()">Negotiate / Log Blocker</button>
-                <div id="m-neg" style="display:none; margin-top:20px;">
-                    <textarea id="m-blocker" placeholder="State reason for blocker..." style="color:black; border-bottom:1px solid #ddd;"></textarea>
-                    <button class="btn btn-primary" style="background:var(--risk); color:white;" onclick="switchScreen(5)">Log Blocker & Finalize</button>
-                </div>
+                <label style="color:#888;">Accountability Assignment</label>
+                <input type="text" id="m-owner" placeholder="Name of Person Responsible" style="color:black; border-bottom:1px solid #ddd;">
+                <p><strong>Directive:</strong> You are required to dissolve vertical approval gates and establish peer-to-peer sign-off protocols to maintain horizontal speed.</p>
+                <button class="btn btn-primary" style="width:100%; margin-top:20px;" onclick="nav(3)">Commit & Execute</button>
             </div>
         </div>
     </div>
 
-    <div id="step-4" class="screen">
-        <button class="btn-back" onclick="switchScreen(3)">← Back</button>
+    <div id="step-3" class="screen">
         <div class="logic-card">
-            <label>Phase 4: Action Ledger</label>
-            <div id="ledger-checks">
-                </div>
-            <input type="text" id="m-evidence" placeholder="Evidence ID / Link" style="margin-top:20px;">
-            <button class="btn btn-primary" onclick="switchScreen(5)">Generate Forensic Briefing</button>
+            <label>Phase 3: The Action Ledger</label>
+            <div id="checks">
+                <div class="check-item"><input type="checkbox"> <span>Audit approval bottlenecks</span></div>
+                <div class="check-item"><input type="checkbox"> <span>Draft Peer-to-Peer protocols</span></div>
+                <div class="check-item"><input type="checkbox"> <span>Phase-out legacy signature requirements</span></div>
+            </div>
+            
+            <label style="margin-top:30px;">Tactical Observations</label>
+            <textarea id="m-tactical" placeholder="Record the field reality: What happened during execution?"></textarea>
+            
+            <label>Generated Evidence ID</label>
+            <div class="evidence-tag" id="ev-id">MV-GENERATING...</div>
+            
+            <button class="btn btn-primary" style="margin-top:30px;" onclick="nav(4)">Finalize Forensic Briefing</button>
         </div>
     </div>
 
-    <div id="step-5" class="screen">
-        <div class="jtbd-white" id="m-report"></div>
-        <button class="btn btn-primary" style="margin-top:20px; width:100%; background:var(--gold);" onclick="location.reload()">Golden Move: Accept & Seal Ledger</button>
+    <div id="step-4" class="screen">
+        <div class="jtbd-white" id="m-briefing">
+            </div>
+        <div class="jtbd-white" style="margin-top:20px; border-top: 5px solid var(--gold);">
+            <label style="color:#888;">CEO Authorization</label>
+            <p style="font-size: 0.9rem; margin-bottom: 20px;">By clicking below, the CEO acknowledges the methodology, accepts the evidence, and institutionalizes the movement.</p>
+            <button class="btn btn-gold" onclick="location.reload()">Accept & Seal: Execute Golden Move</button>
+        </div>
     </div>
 </main>
 
 <script>
-    let state = { intent: "", owner: "", blocker: "", evidence: "" };
-    const moves = ["Map Output-Based Pods", "Dissolve Approval Gates", "Sync Local Scoreboards", "Deploy Right-to-Ship Protocols", "Decommission Legacy Charts"];
+    let state = { intent: "", owner: "", tactical: "", ev: "" };
 
-    function ignite() {
+    function nav(num) {
         state.intent = document.getElementById('m-intent').value;
-        if (!state.intent) return;
-        const container = document.getElementById('m-moves');
-        container.innerHTML = moves.map((m, i) => `<div class="move-row"><span>MOVE ${i+1}: ${m}</span><button onclick="warn()" style="color:var(--accent); background:none; border:none; cursor:pointer; font-size:0.7rem;">EDIT</button></div>`).join('');
-        
-        const checks = document.getElementById('ledger-checks');
-        checks.innerHTML = moves.map((m, i) => `<div class="move-row"><input type="checkbox" style="width:auto; margin-right:15px;"><span>${m}</span></div>`).join('');
-        
-        switchScreen(2);
-    }
-
-    function warn() { document.getElementById('m-dissonance').innerHTML = `<div style="color:var(--risk); border:1px solid var(--risk); padding:15px; border-radius:4px; margin:15px 0;"><strong>LOGIC DISSONANCE:</strong> Manual override re-introduces the Swirl. Success drops to 12%.</div>`; }
-    function showNeg() { document.getElementById('m-neg').style.display = 'block'; }
-
-    function switchScreen(n) {
         state.owner = document.getElementById('m-owner').value;
-        state.blocker = document.getElementById('m-blocker').value;
-        state.evidence = document.getElementById('m-evidence').value;
+        state.tactical = document.getElementById('m-tactical').value;
+        
+        if (num === 3) {
+            state.ev = "MV-" + state.intent.substring(0,3).toUpperCase() + "-" + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('ev-id').innerText = state.ev;
+        }
+
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById('step-' + n).classList.add('active');
-        if (n === 5) buildReport();
+        document.getElementById('step-' + num).classList.add('active');
+        
+        if (num === 4) buildBriefing();
         window.scrollTo(0,0);
     }
 
-    function buildReport() {
-        const report = document.getElementById('m-report');
-        const blocked = state.blocker.length > 0;
-        report.innerHTML = `
-            <label style="color:#888;">Executive Methodology Report</label>
-            <h1 style="margin: 10px 0;">Status: ${blocked ? '<span style="color:red;">BLOCKED</span>' : '<span style="color:green;">VERIFIED</span>'}</h1>
-            <div class="report-section"><strong>Intent:</strong> ${state.intent}</div>
-            <div class="report-section"><strong>Execution Owner:</strong> ${state.owner}</div>
-            <div class="report-section"><strong>Friction/Blocker:</strong> ${state.blocker || 'None.'}</div>
-            <div class="report-section"><strong>Evidence ID:</strong> ${state.evidence || 'N/A'}</div>
-            <p style="margin-top:20px; font-weight:700;">Conclusion: ${blocked ? 'CEO intervention required.' : 'Target achieved. Institutionalize move.'}</p>
+    function buildBriefing() {
+        const brief = document.getElementById('m-briefing');
+        brief.innerHTML = `
+            <label style="color:#888;">Executive Methodology Briefing</label>
+            <h1 style="margin: 20px 0; font-weight: 900;">Movement Verification: SUCCESS</h1>
+            
+            <div class="section-break">
+                <strong>1. Strategic Intent:</strong><br>${state.intent}
+            </div>
+            <div class="section-break">
+                <strong>2. Execution Accountability:</strong><br>${state.owner}
+            </div>
+            <div class="section-break">
+                <strong>3. Tactical Narrative & Evidence:</strong><br>
+                <p style="margin: 10px 0; font-style: italic;">"${state.tactical || 'No friction reported during execution.'}"</p>
+                <div class="evidence-tag">Evidence ID: ${state.ev}</div>
+            </div>
+            <div class="section-break" style="border:none;">
+                <strong>4. Methodology Recommendation:</strong><br>
+                Based on the ${state.ev} verification, this movement is categorized as <strong>Horizontal Optimized</strong>. Recommend immediate organizational scale.
+            </div>
         `;
     }
 </script>
