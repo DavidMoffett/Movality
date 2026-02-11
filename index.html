@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOVALITY | Integrated Master Engine</title>
+    <title>MOVALITY | Master Engine</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -26,8 +26,8 @@
         .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
         .btn-back { background: transparent; color: #666; font-size: 0.7rem; border: none; cursor: pointer; margin-bottom: 15px; }
         .jtbd-white { background: #fff; color: #000; padding: 40px; border-radius: 4px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .alert-box { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--risk); color: var(--risk); padding: 20px; border-radius: 4px; margin-top: 15px; }
         .report-section { border-bottom: 1px solid #eee; padding: 15px 0; }
+        .move-row { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 4px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid var(--accent); }
     </style>
 </head>
 <body>
@@ -38,33 +38,33 @@
     <div id="step-1" class="screen active">
         <div class="logic-card">
             <label>Strategic Intent</label>
-            <input type="text" id="master-intent" placeholder="What is the mission?" autofocus>
-            <button class="btn btn-primary" onclick="igniteLogic()">Ignite & Architect</button>
+            <input type="text" id="m-intent" placeholder="Define the Strategic Mission..." autofocus>
+            <button class="btn btn-primary" onclick="ignite()">Evaluate & Architect</button>
         </div>
     </div>
 
     <div id="step-2" class="screen">
-        <button class="btn-back" onclick="switchScreen(1)">← Back to Intent</button>
+        <button class="btn-back" onclick="switchScreen(1)">← Back</button>
         <div class="logic-card">
-            <label>Engine Synthesis | Success Prediction: +40% Velocity</label>
-            <div id="moves-container"></div>
-            <div id="dissonance-area"></div>
-            <button class="btn btn-primary" style="margin-top:20px;" onclick="switchScreen(3)">Accept Logic & Issue Directives</button>
+            <label>Phase 2: Engine Synthesis | Success Prediction: +40% Velocity</label>
+            <div id="m-moves"></div>
+            <div id="m-dissonance"></div>
+            <button class="btn btn-primary" onclick="switchScreen(3)">Accept Logic & Issue Directives</button>
         </div>
     </div>
 
     <div id="step-3" class="screen">
-        <button class="btn-back" onclick="switchScreen(2)">← Back to Logic</button>
+        <button class="btn-back" onclick="switchScreen(2)">← Back</button>
         <div class="logic-card">
-            <label>Execution Directive</label>
-            <input type="text" id="owner-name" placeholder="Assign Delivery Owner (e.g. Sarah Jenkins)">
+            <label>Phase 3: Execution Directive</label>
+            <input type="text" id="m-owner" placeholder="Assign Delivery Owner (e.g. Sarah Jenkins)">
             <div class="jtbd-white">
-                <p><strong>JTBD:</strong> You must dissolve middle-management approval gates and establish peer-to-peer sign-off protocols to maintain velocity.</p>
+                <p><strong>JTBD:</strong> You must dissolve middle-management approval gates and establish peer-to-peer sign-off protocols to achieve horizontal velocity.</p>
                 <hr style="margin:20px 0;">
                 <button class="btn btn-primary" onclick="switchScreen(4)">Accept & Execute</button>
                 <button class="btn btn-outline" style="border-color:#000; color:#000; margin-left:10px;" onclick="showNeg()">Negotiate / Log Blocker</button>
-                <div id="neg-field" style="display:none; margin-top:20px;">
-                    <textarea id="blocker-log" placeholder="State reason for blocker..." style="color:black; border-bottom:1px solid #ddd;"></textarea>
+                <div id="m-neg" style="display:none; margin-top:20px;">
+                    <textarea id="m-blocker" placeholder="State reason for blocker..." style="color:black; border-bottom:1px solid #ddd;"></textarea>
                     <button class="btn btn-primary" style="background:var(--risk); color:white;" onclick="switchScreen(5)">Log Blocker & Finalize</button>
                 </div>
             </div>
@@ -72,53 +72,45 @@
     </div>
 
     <div id="step-4" class="screen">
-        <button class="btn-back" onclick="switchScreen(3)">← Back to Directive</button>
+        <button class="btn-back" onclick="switchScreen(3)">← Back</button>
         <div class="logic-card">
-            <label>Action Ledger</label>
-            <textarea id="action-log" placeholder="Record moves made (e.g. Move 1: Audited current gates...)"></textarea>
-            <input type="text" id="evidence-id" placeholder="Evidence ID / Link">
+            <label>Phase 4: Action Ledger</label>
+            <div id="ledger-checks">
+                </div>
+            <input type="text" id="m-evidence" placeholder="Evidence ID / Link" style="margin-top:20px;">
             <button class="btn btn-primary" onclick="switchScreen(5)">Generate Forensic Briefing</button>
         </div>
     </div>
 
     <div id="step-5" class="screen">
-        <div class="jtbd-white" id="final-brief"></div>
-        <button class="btn btn-primary" style="margin-top:20px; width:100%; background:var(--gold);" onclick="location.reload()">Accept & Seal: Golden Move</button>
+        <div class="jtbd-white" id="m-report"></div>
+        <button class="btn btn-primary" style="margin-top:20px; width:100%; background:var(--gold);" onclick="location.reload()">Golden Move: Accept & Seal Ledger</button>
     </div>
 </main>
 
 <script>
-    let state = { intent: "", owner: "", blocker: "", actions: "", evidence: "" };
-    const defaultMoves = ["Map Output-Based Pods", "Dissolve Middle-Management Gates", "Sync Local Scoreboards to Ledger"];
+    let state = { intent: "", owner: "", blocker: "", evidence: "" };
+    const moves = ["Map Output-Based Pods", "Dissolve Approval Gates", "Sync Local Scoreboards", "Deploy Right-to-Ship Protocols", "Decommission Legacy Charts"];
 
-    function igniteLogic() {
-        state.intent = document.getElementById('master-intent').value;
+    function ignite() {
+        state.intent = document.getElementById('m-intent').value;
         if (!state.intent) return;
-        const container = document.getElementById('moves-container');
-        container.innerHTML = defaultMoves.map((m, i) => `
-            <div style="background:#1e1e1e; padding:15px; border-radius:4px; margin-bottom:10px; display:flex; justify-content:space-between;">
-                <span>MOVE ${i+1}: ${m}</span>
-                <button onclick="warnDissonance()" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:0.7rem;">EDIT</button>
-            </div>
-        `).join('');
+        const container = document.getElementById('m-moves');
+        container.innerHTML = moves.map((m, i) => `<div class="move-row"><span>MOVE ${i+1}: ${m}</span><button onclick="warn()" style="color:var(--accent); background:none; border:none; cursor:pointer; font-size:0.7rem;">EDIT</button></div>`).join('');
+        
+        const checks = document.getElementById('ledger-checks');
+        checks.innerHTML = moves.map((m, i) => `<div class="move-row"><input type="checkbox" style="width:auto; margin-right:15px;"><span>${m}</span></div>`).join('');
+        
         switchScreen(2);
     }
 
-    function warnDissonance() {
-        document.getElementById('dissonance-area').innerHTML = `
-            <div class="alert-box"><strong>LOGIC DISSONANCE:</strong> Manual override detected. Predicted success drops to 12%. Re-introducing hierarchy creates The Swirl.</div>
-        `;
-    }
-
-    function showNeg() { document.getElementById('neg-field').style.display = 'block'; }
+    function warn() { document.getElementById('m-dissonance').innerHTML = `<div style="color:var(--risk); border:1px solid var(--risk); padding:15px; border-radius:4px; margin:15px 0;"><strong>LOGIC DISSONANCE:</strong> Manual override re-introduces the Swirl. Success drops to 12%.</div>`; }
+    function showNeg() { document.getElementById('m-neg').style.display = 'block'; }
 
     function switchScreen(n) {
-        // Capture data
-        state.owner = document.getElementById('owner-name').value;
-        state.blocker = document.getElementById('blocker-log').value;
-        state.actions = document.getElementById('action-log').value;
-        state.evidence = document.getElementById('evidence-id').value;
-
+        state.owner = document.getElementById('m-owner').value;
+        state.blocker = document.getElementById('m-blocker').value;
+        state.evidence = document.getElementById('m-evidence').value;
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById('step-' + n).classList.add('active');
         if (n === 5) buildReport();
@@ -126,18 +118,16 @@
     }
 
     function buildReport() {
-        const report = document.getElementById('final-brief');
-        const isBlocked = state.blocker.length > 0;
-        const status = isBlocked ? '<span style="color:red;">BLOCKED (ACTION REQUIRED)</span>' : '<span style="color:green;">VERIFIED RESULT</span>';
-        
+        const report = document.getElementById('m-report');
+        const blocked = state.blocker.length > 0;
         report.innerHTML = `
             <label style="color:#888;">Executive Methodology Report</label>
-            <h1 style="margin: 10px 0;">Strategic Status: ${status}</h1>
+            <h1 style="margin: 10px 0;">Status: ${blocked ? '<span style="color:red;">BLOCKED</span>' : '<span style="color:green;">VERIFIED</span>'}</h1>
             <div class="report-section"><strong>Intent:</strong> ${state.intent}</div>
-            <div class="report-section"><strong>Accountability Owner:</strong> ${state.owner}</div>
-            <div class="report-section"><strong>Evidence Reference:</strong> ${state.evidence || 'N/A'}</div>
-            <div class="report-section"><strong>Friction / Blockers:</strong><br>${state.blocker || 'None detected. Velocity maintained.'}</div>
-            <p style="margin-top:20px; font-size:0.8rem; font-weight:700;">Conclusion: ${isBlocked ? 'Intervention required to remove identified bottlenecks.' : 'Strategic targets met. Move is institutionalized.'}</p>
+            <div class="report-section"><strong>Execution Owner:</strong> ${state.owner}</div>
+            <div class="report-section"><strong>Friction/Blocker:</strong> ${state.blocker || 'None.'}</div>
+            <div class="report-section"><strong>Evidence ID:</strong> ${state.evidence || 'N/A'}</div>
+            <p style="margin-top:20px; font-weight:700;">Conclusion: ${blocked ? 'CEO intervention required.' : 'Target achieved. Institutionalize move.'}</p>
         `;
     }
 </script>
