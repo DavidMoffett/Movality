@@ -2,103 +2,239 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>VELOCIMOVE | v42.2 INDUSTRIAL ENGINE</title>
+    <title>VELOCIMOVE | v42.0 STRATEGIC FLIGHT DECK</title>
     <style>
-        :root { --bg: #030303; --gold: #d4af37; --green: #00ff41; --blue: #00d4ff; --panel: #0a0a0a; }
-        body { background: var(--bg); color: #fff; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; letter-spacing: 1px; }
-        .deck { display: grid; grid-template-columns: 320px 1fr 380px; height: 100vh; }
-        
-        /* Phase Sidebar */
-        .sidebar { background: var(--panel); border-right: 1px solid #222; padding: 25px; }
-        .phase { padding: 18px; border: 1px solid #1a1a1a; margin-bottom: 12px; font-size: 0.85rem; color: #333; transition: 0.3s; }
-        .phase.active { border-color: var(--gold); color: #fff; background: rgba(212, 175, 55, 0.1); box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.1); }
-        .phase.complete { border-color: var(--green); color: var(--green); background: rgba(0, 255, 65, 0.05); }
+        :root {
+            --industrial-black: #050505;
+            --velocity-gold: #d4af37;
+            --thrust-green: #00ff41;
+            --drag-red: #ff3e3e;
+            --logic-blue: #00d4ff;
+            --grid: #1a1a1a;
+        }
 
-        /* Telemetry HUD */
-        .main { display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #0d0d0d 0%, #000 100%); }
-        #gauge { font-size: 8rem; font-weight: 900; color: var(--green); font-family: 'Impact', sans-serif; }
-        .label { color: var(--gold); text-transform: uppercase; font-size: 1rem; letter-spacing: 5px; }
-        #status { border: 1px solid var(--blue); padding: 10px 40px; margin-top: 30px; font-size: 0.9rem; color: var(--blue); text-transform: uppercase; }
+        body {
+            background-color: var(--industrial-black);
+            color: #eee;
+            font-family: 'Inter', 'Segoe UI', 'Courier New', monospace;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            height: 100vh;
+        }
 
-        /* Action Ledger */
-        .ledger { background: var(--panel); border-left: 1px solid #222; padding: 25px; overflow-y: hidden; }
-        .log-entry { font-size: 0.7rem; color: #555; padding: 6px 0; border-bottom: 1px solid #111; }
-        .id { color: var(--gold); font-weight: bold; }
+        /* LEFT PANEL: 8-PHASE ARCHITECTURE */
+        #phase-sidebar {
+            width: 350px;
+            background: #0a0a0a;
+            border-right: 2px solid var(--grid);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .phase-card {
+            padding: 20px;
+            border: 1px solid #222;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+            color: #444;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+        }
+
+        .phase-card.active {
+            border-color: var(--velocity-gold);
+            color: #fff;
+            background: rgba(212, 175, 55, 0.05);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+
+        .phase-card.complete {
+            border-color: var(--thrust-green);
+            color: var(--thrust-green);
+        }
+
+        .phase-card.complete::after {
+            content: "LOCKED";
+            position: absolute;
+            right: 15px;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+        }
+
+        /* CENTER: THE KINETIC HUB */
+        #telemetry-hub {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+            position: relative;
+        }
+
+        .cd-display {
+            text-align: center;
+        }
+
+        #cd-value {
+            font-size: 9rem;
+            font-weight: 900;
+            color: var(--thrust-green);
+            letter-spacing: -5px;
+            margin: 0;
+        }
+
+        .hud-label {
+            color: var(--velocity-gold);
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* RIGHT PANEL: FORENSIC ACTION LEDGER */
+        #ledger-panel {
+            width: 400px;
+            background: #0a0a0a;
+            border-left: 2px solid var(--grid);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ledger-entry {
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            padding: 10px 0;
+            border-bottom: 1px solid #111;
+            color: #666;
+        }
+
+        .ev-id { color: var(--velocity-gold); font-weight: bold; }
+
+        #executive-seal {
+            margin-top: auto;
+            border: 1px solid var(--logic-blue);
+            padding: 15px;
+            color: var(--logic-blue);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <div class="deck">
-        <div id="phase-list" class="sidebar"></div>
-        <div class="main">
-            <div class="label">Drag Coefficient</div>
-            <div id="gauge">0.00</div>
-            <div id="status">BOOTING ENGINE...</div>
-        </div>
-        <div id="ledger" class="ledger"><div class="label" style="font-size: 0.7rem; margin-bottom:15px;">Action Ledger</div></div>
+
+    <div id="phase-sidebar">
+        <h2 style="color: var(--velocity-gold); font-size: 1rem; letter-spacing: 5px; margin-bottom: 40px;">VELOCIMOVE v42.0</h2>
+        <div id="p1" class="phase-card">01 STRATEGIC INTENT</div>
+        <div id="p2" class="phase-card">02 LOGIC SYNTHESIS</div>
+        <div id="p3" class="phase-card">03 THE LOGIC GATE</div>
+        <div id="p4" class="phase-card">04 R-A-I ASSIGNMENT</div>
+        <div id="p5" class="phase-card">05 ACTION LEDGER</div>
+        <div id="p6" class="phase-card">06 VELOCITY AUDIT</div>
+        <div id="p7" class="phase-card">07 SUCCESSION LOOP</div>
+        <div id="p8" class="phase-card">08 EXECUTIVE RESOLUTION</div>
+    </div>
+
+    <div id="telemetry-hub">
+        <div class="hud-label">Drag Coefficient</div>
+        <h1 id="cd-value">0.00</h1>
+        <div id="executive-seal">ENGINE STATUS: STANDBY</div>
+    </div>
+
+    <div id="ledger-panel">
+        <div class="hud-label" style="font-size: 0.7rem; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px;">Forensic Ledger</div>
+        <div id="ledger-stream"></div>
     </div>
 
 <script>
-const VELOCIMOVE = {
-    step: 1, 
-    count: 0,
-    phases: ["Strategic Intent", "Logic Synthesis", "Logic Gate", "R-A-I Assignment", "Action Ledger", "Velocity Audit", "Succession Loop", "Executive Resolution"],
-    
-    init() {
-        this.render();
-        this.log("SYS_INIT", "V42.2 POWERING ON");
-        this.start();
-    },
+    const VelocimoveEngine = {
+        state: {
+            phase: 1,
+            evidence: 0,
+            latency: 0.04,
+            swirl: 0,
+            velocity: 1.1,
+            isLocked: false
+        },
 
-    render() {
-        const list = document.getElementById('phase-list');
-        list.innerHTML = this.phases.map((name, i) => {
-            const num = i + 1;
-            let cls = (num < this.step) ? 'complete' : (num === this.step ? 'active' : '');
-            return `<div class="phase ${cls}">${num.toString().padStart(2,'0')} ${name.toUpperCase()} ${cls==='complete'?'✓':''}</div>`;
-        }).join('');
-    },
+        phases: ["p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8"],
 
-    log(id, msg) {
-        const l = document.getElementById('ledger');
-        const e = document.createElement('div');
-        e.className = 'log-entry';
-        e.innerHTML = `<span class="id">ID:${id}</span> | ${msg}`;
-        l.insertBefore(e, l.firstChild.nextSibling);
-        this.count++;
-        // DRIVE LOGIC: Advance phase every 3 entries
-        if (this.count % 3 === 0) this.advance();
-    },
+        init() {
+            this.updateUI();
+            this.runIndustrialCycle();
+        },
 
-    advance() {
-        if (this.step < 8) {
-            this.step++;
-            this.render();
-            this.log(`PUSH`, `ADVANCING TO PHASE ${this.step}`);
-            if (this.step === 8) {
-                document.getElementById('status').innerText = "CEO SEAL AFFIXED - MISSION CLOSED";
-                document.getElementById('status').style.color = "var(--green)";
-                document.getElementById('status').style.borderColor = "var(--green)";
-                document.getElementById('gauge').style.color = "var(--blue)";
+        updateUI() {
+            // Update Phases
+            this.phases.forEach((id, index) => {
+                const el = document.getElementById(id);
+                el.classList.remove('active', 'complete');
+                if (index + 1 < this.state.phase) el.classList.add('complete');
+                else if (index + 1 === this.state.phase) el.classList.add('active');
+            });
+
+            // Update Drag Calc: (Latency + Swirl) / Velocity
+            const cd = ((this.state.latency + this.state.swirl) / this.state.velocity).toFixed(2);
+            const cdDisplay = document.getElementById('cd-value');
+            cdDisplay.innerText = cd;
+            cdDisplay.style.color = cd > 0.4 ? 'var(--drag-red)' : 'var(--thrust-green)';
+
+            if (this.state.phase === 8 && !this.state.isLocked) {
+                this.finalizeResolution();
             }
+        },
+
+        addLedgerEntry(type, detail) {
+            const stream = document.getElementById('ledger-stream');
+            const entry = document.createElement('div');
+            entry.className = 'ledger-entry';
+            const id = Math.floor(Math.random() * 900000) + 100000;
+            entry.innerHTML = `<span class="ev-id">EVID-${id}</span> [${type}] ${detail}`;
+            stream.insertBefore(entry, stream.firstChild);
+            
+            this.state.evidence++;
+            if (this.state.evidence % 4 === 0) this.advancePhase();
+        },
+
+        advancePhase() {
+            if (this.state.phase < 8) {
+                this.state.phase++;
+                this.state.latency = Math.random() * 0.08;
+                this.addLedgerEntry("SUCCESSION", `Advancing to ${this.phases[this.state.phase-1].toUpperCase()}`);
+                this.updateUI();
+            }
+        },
+
+        finalizeResolution() {
+            this.state.isLocked = true;
+            const seal = document.getElementById('executive-seal');
+            seal.innerText = "CEO SEAL AFFIXED - MISSION PERMANENTLY LOCKED";
+            seal.style.borderColor = "var(--thrust-green)";
+            seal.style.color = "var(--thrust-green)";
+            this.addLedgerEntry("ARCHIVE", "Executive Resolution Generated.");
+        },
+
+        runIndustrialCycle() {
+            setInterval(() => {
+                if (this.state.phase < 8) {
+                    // Random "Swirl" friction simulation
+                    if (Math.random() > 0.85) {
+                        this.state.swirl += 0.05;
+                        this.addLedgerEntry("DISSONANCE", "Human override attempt detected at Logic Gate.");
+                    } else {
+                        this.state.swirl = Math.max(0, this.state.swirl - 0.01);
+                        this.addLedgerEntry("TELEMETRY", "Node synchronization optimal.");
+                    }
+                    this.updateUI();
+                }
+            }, 2500);
         }
-    },
+    };
 
-    start() {
-        setInterval(() => {
-            if (this.step < 8) {
-                // Physics Telemetry
-                const drag = (Math.random() * 0.12 + 0.04).toFixed(2);
-                document.getElementById('gauge').innerText = drag;
-                document.getElementById('status').innerText = `EXECUTING PHASE ${this.step}...`;
-                
-                // Data Injection
-                const id = Math.floor(Math.random() * 899) + 100;
-                this.log(id, "TELEMETRY_SYNC");
-            }
-        }, 1800); // 1.8 second heartbeat
-    }
-};
-window.onload = () => VELOCIMOVE.init();
+    window.onload = () => VelocimoveEngine.init();
 </script>
 </body>
 </html>
