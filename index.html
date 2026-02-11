@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOVALITY | Forensic Engine</title>
+    <title>MOVALITY | Integrated Master Engine</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -12,9 +12,9 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--obsidian); color: #ccc; line-height: 1.6; }
-        header { padding: 30px; text-align: center; border-bottom: 1px solid #222; }
-        .logo { font-weight: 900; font-size: 2rem; letter-spacing: 0.8rem; text-transform: uppercase; color: var(--white); }
-        #movality-app { max-width: 900px; margin: 40px auto 120px auto; padding: 20px; }
+        header { padding: 40px; text-align: center; border-bottom: 1px solid #222; }
+        .logo { font-weight: 900; font-size: 2.5rem; letter-spacing: 0.8rem; text-transform: uppercase; color: var(--white); }
+        #movality-app { max-width: 900px; margin: 40px auto 150px auto; padding: 20px; }
         .screen { display: none; animation: fadeIn 0.4s ease-out forwards; }
         .screen.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -23,10 +23,11 @@
         input, textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; color: white; font-size: 1.2rem; padding: 12px 0; outline: none; margin-bottom: 20px; }
         .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; font-size: 0.8rem; border-radius: 2px; transition: 0.2s; }
         .btn-primary { background: var(--white); color: var(--obsidian); }
-        .btn-gold { background: var(--gold); color: black; width: 100%; margin-top: 30px; }
+        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+        .btn-back { background: transparent; color: #666; font-size: 0.7rem; border: none; cursor: pointer; margin-bottom: 15px; }
         .jtbd-white { background: #fff; color: #000; padding: 40px; border-radius: 4px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .alert-box { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--risk); color: var(--risk); padding: 20px; border-radius: 4px; margin-top: 15px; }
         .report-section { border-bottom: 1px solid #eee; padding: 15px 0; }
-        .metric-pill { display: inline-block; padding: 4px 10px; background: rgba(56, 182, 255, 0.1); color: var(--accent); border-radius: 12px; font-size: 0.7rem; font-weight: 900; }
     </style>
 </head>
 <body>
@@ -36,80 +37,108 @@
 <main id="movality-app">
     <div id="step-1" class="screen active">
         <div class="logic-card">
-            <label>Phase 1: Strategic Intent</label>
-            <input type="text" id="user-intent" placeholder="What is the mission?" autofocus>
-            <button class="btn btn-primary" onclick="ignite()">Evaluate & Generate Moves</button>
+            <label>Strategic Intent</label>
+            <input type="text" id="master-intent" placeholder="What is the mission?" autofocus>
+            <button class="btn btn-primary" onclick="igniteLogic()">Ignite & Architect</button>
         </div>
     </div>
 
     <div id="step-2" class="screen">
+        <button class="btn-back" onclick="switchScreen(1)">← Back to Intent</button>
         <div class="logic-card">
-            <label>Phase 2: Execution Architecture</label>
-            <div id="moves-list" style="margin-bottom: 30px;"></div>
-            
-            <div class="jtbd-white">
-                <label style="color:#888;">Accountability Assignment</label>
-                <input type="text" id="owner" placeholder="Name of Person Accountable" style="color:black; border-bottom:1px solid #ddd;">
-                <label style="color:#888;">Field Observations / Blockers</label>
-                <textarea id="obs" placeholder="Any friction detected during execution?" style="color:black; border-bottom:1px solid #ddd;"></textarea>
-                <button class="btn btn-primary" style="width:100%;" onclick="finalize()">Generate CEO Briefing</button>
-            </div>
+            <label>Engine Synthesis | Success Prediction: +40% Velocity</label>
+            <div id="moves-container"></div>
+            <div id="dissonance-area"></div>
+            <button class="btn btn-primary" style="margin-top:20px;" onclick="switchScreen(3)">Accept Logic & Issue Directives</button>
         </div>
     </div>
 
     <div id="step-3" class="screen">
-        <div class="jtbd-white" id="ceo-report"></div>
-        <button class="btn btn-gold" onclick="location.reload()">Accept & Seal Directive</button>
+        <button class="btn-back" onclick="switchScreen(2)">← Back to Logic</button>
+        <div class="logic-card">
+            <label>Execution Directive</label>
+            <input type="text" id="owner-name" placeholder="Assign Delivery Owner (e.g. Sarah Jenkins)">
+            <div class="jtbd-white">
+                <p><strong>JTBD:</strong> You must dissolve middle-management approval gates and establish peer-to-peer sign-off protocols to maintain velocity.</p>
+                <hr style="margin:20px 0;">
+                <button class="btn btn-primary" onclick="switchScreen(4)">Accept & Execute</button>
+                <button class="btn btn-outline" style="border-color:#000; color:#000; margin-left:10px;" onclick="showNeg()">Negotiate / Log Blocker</button>
+                <div id="neg-field" style="display:none; margin-top:20px;">
+                    <textarea id="blocker-log" placeholder="State reason for blocker..." style="color:black; border-bottom:1px solid #ddd;"></textarea>
+                    <button class="btn btn-primary" style="background:var(--risk); color:white;" onclick="switchScreen(5)">Log Blocker & Finalize</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="step-4" class="screen">
+        <button class="btn-back" onclick="switchScreen(3)">← Back to Directive</button>
+        <div class="logic-card">
+            <label>Action Ledger</label>
+            <textarea id="action-log" placeholder="Record moves made (e.g. Move 1: Audited current gates...)"></textarea>
+            <input type="text" id="evidence-id" placeholder="Evidence ID / Link">
+            <button class="btn btn-primary" onclick="switchScreen(5)">Generate Forensic Briefing</button>
+        </div>
+    </div>
+
+    <div id="step-5" class="screen">
+        <div class="jtbd-white" id="final-brief"></div>
+        <button class="btn btn-primary" style="margin-top:20px; width:100%; background:var(--gold);" onclick="location.reload()">Accept & Seal: Golden Move</button>
     </div>
 </main>
 
 <script>
-    const engineIntelligence = [
-        { move: "Map Output-Based Pods", impact: "+15% Velocity" },
-        { move: "Dissolve Middle-Management Gates", impact: "+25% Velocity" },
-        { move: "Sync Local Scoreboards to Ledger", impact: "Verification Secured" }
-    ];
+    let state = { intent: "", owner: "", blocker: "", actions: "", evidence: "" };
+    const defaultMoves = ["Map Output-Based Pods", "Dissolve Middle-Management Gates", "Sync Local Scoreboards to Ledger"];
 
-    let state = { intent: "", owner: "", obs: "" };
-
-    function ignite() {
-        state.intent = document.getElementById('user-intent').value;
+    function igniteLogic() {
+        state.intent = document.getElementById('master-intent').value;
         if (!state.intent) return;
-        
-        let list = document.getElementById('moves-list');
-        list.innerHTML = `<p style="margin-bottom:15px; font-weight:900;">Engine Directives:</p>`;
-        engineIntelligence.forEach(m => {
-            list.innerHTML += `<div style="padding:15px; background:#1e1e1e; border-radius:4px; margin-bottom:10px;">
-                <span class="metric-pill">${m.impact}</span> <span style="margin-left:10px;">${m.move}</span>
-            </div>`;
-        });
+        const container = document.getElementById('moves-container');
+        container.innerHTML = defaultMoves.map((m, i) => `
+            <div style="background:#1e1e1e; padding:15px; border-radius:4px; margin-bottom:10px; display:flex; justify-content:space-between;">
+                <span>MOVE ${i+1}: ${m}</span>
+                <button onclick="warnDissonance()" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:0.7rem;">EDIT</button>
+            </div>
+        `).join('');
         switchScreen(2);
     }
 
-    function finalize() {
-        state.owner = document.getElementById('owner').value;
-        state.obs = document.getElementById('obs').value;
-        if (!state.owner) return alert("Owner Required.");
+    function warnDissonance() {
+        document.getElementById('dissonance-area').innerHTML = `
+            <div class="alert-box"><strong>LOGIC DISSONANCE:</strong> Manual override detected. Predicted success drops to 12%. Re-introducing hierarchy creates The Swirl.</div>
+        `;
+    }
 
-        let report = document.getElementById('ceo-report');
-        let status = state.obs ? '<span style="color:red;">INTERVENTION REQUIRED</span>' : '<span style="color:green;">MOVEMENT VERIFIED</span>';
+    function showNeg() { document.getElementById('neg-field').style.display = 'block'; }
+
+    function switchScreen(n) {
+        // Capture data
+        state.owner = document.getElementById('owner-name').value;
+        state.blocker = document.getElementById('blocker-log').value;
+        state.actions = document.getElementById('action-log').value;
+        state.evidence = document.getElementById('evidence-id').value;
+
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById('step-' + n).classList.add('active');
+        if (n === 5) buildReport();
+        window.scrollTo(0,0);
+    }
+
+    function buildReport() {
+        const report = document.getElementById('final-brief');
+        const isBlocked = state.blocker.length > 0;
+        const status = isBlocked ? '<span style="color:red;">BLOCKED (ACTION REQUIRED)</span>' : '<span style="color:green;">VERIFIED RESULT</span>';
         
         report.innerHTML = `
             <label style="color:#888;">Executive Methodology Report</label>
-            <h1 style="margin: 10px 0;">Status: ${status}</h1>
-            <div class="report-section"><strong>Strategic Intent:</strong><br>${state.intent}</div>
-            <div class="report-section"><strong>Execution Lead:</strong><br>${state.owner}</div>
-            <div class="report-section"><strong>Engine Forecast:</strong><br>+40% Potential Gain across 3 Directives.</div>
-            <div class="report-section"><strong>Human Audit (Blockers):</strong><br>${state.obs || 'No friction detected. Strategic integrity maintained.'}</div>
-            <div style="margin-top:20px; font-weight:900; color:var(--accent);">Conclusion: ${state.obs ? 'Strategic intent compromised by external friction. Re-alignment required.' : 'Velocity targets met. Recommendation: Institutionalize.'}</div>
+            <h1 style="margin: 10px 0;">Strategic Status: ${status}</h1>
+            <div class="report-section"><strong>Intent:</strong> ${state.intent}</div>
+            <div class="report-section"><strong>Accountability Owner:</strong> ${state.owner}</div>
+            <div class="report-section"><strong>Evidence Reference:</strong> ${state.evidence || 'N/A'}</div>
+            <div class="report-section"><strong>Friction / Blockers:</strong><br>${state.blocker || 'None detected. Velocity maintained.'}</div>
+            <p style="margin-top:20px; font-size:0.8rem; font-weight:700;">Conclusion: ${isBlocked ? 'Intervention required to remove identified bottlenecks.' : 'Strategic targets met. Move is institutionalized.'}</p>
         `;
-        switchScreen(3);
-    }
-
-    function switchScreen(n) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById('step-' + n).classList.add('active');
-        window.scrollTo(0,0);
     }
 </script>
 </body>
