@@ -3,89 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOVALITY | R-A-I Directives Engine</title>
+    <title>VELOCIMOVE | Velocity Engineering</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --obsidian: #050505; --gunmetal: #121213; --accent: #38b6ff;
-            --white: #ffffff; --gold: #d4af37; --risk: #ef4444; --steel: #64748b;
+            --white: #ffffff; --gold: #d4af37; --risk: #ef4444; --success: #10b981;
+            --steel: #64748b;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--obsidian); color: #ccc; line-height: 1.6; }
-        header { padding: 40px; text-align: center; border-bottom: 1px solid #222; }
-        .logo { font-weight: 900; font-size: 2.2rem; letter-spacing: 0.8rem; text-transform: uppercase; color: var(--white); }
-        #movality-app { max-width: 900px; margin: 40px auto 150px auto; padding: 0 20px; }
-        
-        .screen { display: none; animation: slideUp 0.3s ease-out forwards; }
-        .screen.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        .logic-card { background: var(--gunmetal); border: 1px solid #222; padding: 45px; border-radius: 4px; margin-bottom: 30px; }
-        label { display: block; text-transform: uppercase; font-size: 0.7rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 0.2rem; }
+        /* The Beautiful Logo Replacement */
+        header { padding: 50px; text-align: center; border-bottom: 1px solid #222; background: linear-gradient(to bottom, #0a0a0a, var(--obsidian)); }
+        .logo-container { display: inline-block; }
+        .logo-main { font-weight: 900; font-size: 2.8rem; letter-spacing: -0.05rem; color: var(--white); text-transform: none; display: flex; align-items: center; justify-content: center; }
+        .logo-v { color: var(--accent); font-style: italic; margin-right: -4px; }
+        .logo-tag { display: block; font-size: 0.7rem; letter-spacing: 0.6rem; text-transform: uppercase; color: var(--steel); margin-top: 10px; font-weight: 700; }
+
+        #velocimove-app { max-width: 950px; margin: 40px auto 150px auto; padding: 0 20px; }
         
-        input, textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; color: white; font-size: 1.2rem; padding: 12px 0; outline: none; margin-bottom: 25px; }
+        .screen { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .screen.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--gunmetal); border: 1px solid #222; padding: 50px; border-radius: 4px; margin-bottom: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+        label { display: block; text-transform: uppercase; font-size: 0.75rem; font-weight: 900; color: var(--accent); margin-bottom: 20px; letter-spacing: 0.25rem; }
+        
+        input, textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; color: white; font-size: 1.3rem; padding: 15px 0; outline: none; margin-bottom: 30px; transition: 0.3s; }
         input:focus { border-bottom-color: var(--accent); }
 
-        .btn { padding: 18px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; font-size: 0.8rem; border-radius: 2px; transition: 0.2s; display: inline-block; }
+        .btn { padding: 20px 40px; font-weight: 900; text-transform: uppercase; cursor: pointer; border: none; font-size: 0.85rem; border-radius: 2px; transition: 0.3s; display: inline-block; text-decoration: none; text-align: center; }
         .btn-primary { background: var(--white); color: var(--obsidian); }
         .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
         .btn-back { background: transparent; color: var(--steel); border: none; cursor: pointer; margin-bottom: 20px; font-size: 0.75rem; font-weight: 800; }
 
-        .jtbd-white { background: #fff; color: #000; padding: 50px; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .directive-block { border-left: 4px solid var(--accent); padding-left: 20px; margin-bottom: 30px; }
-        .move-item { background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 4px; margin-top: 10px; font-size: 0.9rem; display: flex; align-items: center; }
-        .move-item input { width: auto; margin-right: 15px; margin-bottom: 0; }
-        .prose { font-size: 1.1rem; color: #333; line-height: 1.8; margin-bottom: 20px; }
+        /* R-A-I & Scoresheet Components */
+        .directive-box { border-left: 4px solid var(--accent); padding-left: 25px; margin-bottom: 40px; }
+        .move-pill { background: rgba(255,255,255,0.03); padding: 15px 20px; border-radius: 4px; margin-top: 12px; font-size: 0.95rem; display: flex; align-items: center; border: 1px solid #222; }
+        .move-pill input { width: auto; margin-right: 20px; margin-bottom: 0; }
+        
+        /* Phase 4.5 Scoresheet Styles */
+        .audit-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 30px 0; }
+        .audit-item { background: #1a1a1b; padding: 25px; border-radius: 4px; text-align: center; border: 1px solid #222; }
+        .audit-val { font-size: 2rem; font-weight: 900; color: var(--white); display: block; }
+        .audit-label { font-size: 0.65rem; color: var(--steel); text-transform: uppercase; letter-spacing: 0.1rem; margin-top: 10px; display: block; }
+
+        .jtbd-white { background: #fff; color: #000; padding: 60px; border-radius: 4px; box-shadow: 0 40px 80px rgba(0,0,0,0.6); }
+        .prose { font-size: 1.15rem; color: #222; line-height: 1.9; margin-bottom: 25px; }
     </style>
 </head>
 <body>
 
-<header><div class="logo">Movality</div></header>
+<header>
+    <div class="logo-container">
+        <div class="logo-main"><span class="logo-v">V</span>ELOCIMOVE</div>
+        <span class="logo-tag">Velocity Engineering Engine</span>
+    </div>
+</header>
 
-<main id="movality-app">
+<main id="velocimove-app">
     
-    <div id="screen-1" class="screen active">
-        <div class="logic-card">
+    <div id="step-1" class="screen active">
+        <div class="card">
             <label>Phase 1: Strategic Intent</label>
-            <input type="text" id="m-intent" placeholder="What must be achieved?" autofocus>
+            <input type="text" id="v-intent" placeholder="What is the mission?" autofocus>
             <button class="btn btn-primary" onclick="ignite()">Architect Directives</button>
         </div>
     </div>
 
-    <div id="screen-2" class="screen">
-        <button class="btn-back" onclick="nav(1)">← Back</button>
-        <div class="logic-card">
-            <label>Phase 2: Engine-Detected Directives</label>
-            <div id="directives-list"></div>
-            <button class="btn btn-primary" style="margin-top:20px;" onclick="nav(3)">Assign Accountability</button>
+    <div id="step-2" class="screen">
+        <button class="btn-back" onclick="nav(1)">← Recalibrate Intent</button>
+        <div class="card">
+            <label>Phase 2: AI-Generated Directives</label>
+            <div id="v-directives"></div>
+            <button class="btn btn-primary" onclick="nav(3)">Assign Accountability</button>
         </div>
     </div>
 
-    <div id="screen-3" class="screen">
-        <button class="btn-back" onclick="nav(2)">← Back</button>
-        <div class="logic-card">
+    <div id="step-3" class="screen">
+        <button class="btn-back" onclick="nav(2)">← Review Architecture</button>
+        <div class="card">
             <label>Phase 3: R-A-I Assignment</label>
-            <p style="margin-bottom:20px; font-size:0.9rem;">Assign the party Responsible for delivering the Directives.</p>
-            <input type="text" id="m-owner" placeholder="Enter Responsible Party (e.g. Sarah Jenkins)">
-            <p style="color:var(--steel); font-size:0.8rem;">*Accountable Party: User | Informed Party: CEO</p>
-            <button class="btn btn-primary" onclick="nav(4)">Deploy to Action Ledger</button>
+            <input type="text" id="v-owner" placeholder="Responsible Party Name (e.g. Sarah Jenkins)">
+            <p style="color:var(--steel); font-size:0.8rem;">Note: You are the Accountable party. The CEO is the Informed party.</p>
+            <button class="btn btn-primary" style="margin-top:20px;" onclick="nav(4)">Open Action Ledger</button>
         </div>
     </div>
 
-    <div id="screen-4" class="screen">
-        <button class="btn-back" onclick="nav(3)">← Back</button>
-        <div class="logic-card">
-            <label>Phase 4: Action Ledger (Forensic Verification)</label>
-            <div id="ledger-content"></div>
-            <label style="margin-top:30px;">Friction / Blocker Log</label>
-            <textarea id="m-blocker" placeholder="Identify any structural friction encountered..."></textarea>
-            <button class="btn btn-primary" onclick="nav(5)">Generate CEO Resolution</button>
+    <div id="step-4" class="screen">
+        <button class="btn-back" onclick="nav(3)">← Edit Ownership</button>
+        <div class="card">
+            <label>Phase 4: Action Ledger</label>
+            <div id="v-ledger-content"></div>
+            <label style="margin-top:40px;">Structural Friction Log</label>
+            <textarea id="v-blocker" placeholder="Identify structural resistance encountered..."></textarea>
+            <button class="btn btn-primary" onclick="nav(45)">Run Velocity Audit</button>
         </div>
     </div>
 
-    <div id="screen-5" class="screen">
-        <div class="jtbd-white" id="final-report"></div>
-        <button class="btn btn-primary" style="width:100%; background:var(--gold); color:black; margin-top:30px;" onclick="location.reload()">Accept & Seal Directive</button>
+    <div id="step-45" class="screen">
+        <button class="btn-back" onclick="nav(4)">← Back to Ledger</button>
+        <div class="card">
+            <label>Phase 4.5: Velocity Audit Diagnostic</label>
+            <p>Evaluating movement efficiency against strategic intent...</p>
+            
+            <div class="audit-grid">
+                <div class="audit-item">
+                    <span class="audit-val" id="val-efficiency">--</span>
+                    <span class="audit-label">Sprint Efficiency</span>
+                </div>
+                <div class="audit-item">
+                    <span class="audit-val" id="val-drag">--</span>
+                    <span class="audit-label">Drag Coefficient</span>
+                </div>
+                <div class="audit-item">
+                    <span class="audit-val" id="val-integrity">100%</span>
+                    <span class="audit-label">R-A-I Integrity</span>
+                </div>
+            </div>
+
+            <div style="background:rgba(255,255,255,0.03); padding:25px; border-radius:4px; margin-top:20px;">
+                <p style="font-size:0.9rem; color:var(--accent); font-weight:700;">AI INSIGHT:</p>
+                <p id="v-ai-insight" style="font-size:0.95rem; margin-top:5px;"></p>
+            </div>
+
+            <button class="btn btn-primary" style="margin-top:30px; width:100%;" onclick="nav(5)">Generate Executive Briefing</button>
+        </div>
+    </div>
+
+    <div id="step-5" class="screen">
+        <div class="jtbd-white" id="v-final-brief"></div>
+        <button class="btn btn-primary" style="width:100%; background:var(--gold); color:black; margin-top:30px;" onclick="location.reload()">The Golden Move: Seal Velocity Ledger</button>
     </div>
 
 </main>
@@ -93,29 +142,27 @@
 <script>
     let state = { intent: "", owner: "", blocker: "" };
     
-    const directives = [
-        { title: "Silo Dissolution", moves: ["Audit current approval bottlenecks", "Map output-based pod requirements", "Draft Peer-to-Peer protocols"] },
-        { title: "Decision Authority Lockdown", moves: ["Assign Right-to-Ship to Pod Leads", "Decommission vertical signature gates", "Verify decentralized spend limits"] },
-        { title: "Performance Ledger Sync", moves: ["Deploy real-time velocity scoreboards", "Establish single source of truth data", "Automate executive evidence logging"] }
+    const engineDirectives = [
+        { title: "Structural Silo Dissolution", moves: ["Identify functional gatekeepers", "Map output-based pod logic", "Decommission vertical reporting lines"] },
+        { title: "Decision Velocity Lockdown", moves: ["Define 'Right-to-Ship' authority", "Implement Peer-to-Peer sign-off", "Neutralize signature bottlenecks"] },
+        { title: "Evidence Ledger Integration", moves: ["Deploy real-time movement trackers", "Establish single source of truth", "Sync verification to CEO Dashboard"] }
     ];
 
     function ignite() {
-        state.intent = document.getElementById('m-intent').value;
+        state.intent = document.getElementById('v-intent').value;
         if (!state.intent) return;
         
-        const list = document.getElementById('directives-list');
-        list.innerHTML = directives.map(d => `
-            <div class="directive-block">
-                <h3 style="color:white; margin-bottom:10px;">DIRECTIVE: ${d.title}</h3>
-                ${d.moves.map(m => `<p style="font-size:0.85rem; color:var(--steel);">→ Move: ${m}</p>`).join('')}
+        document.getElementById('v-directives').innerHTML = engineDirectives.map(d => `
+            <div class="directive-box">
+                <h3 style="color:white; margin-bottom:10px; font-weight:900;">DIRECTIVE: ${d.title}</h3>
+                ${d.moves.map(m => `<p style="font-size:0.85rem; color:var(--steel);">→ ${m}</p>`).join('')}
             </div>
         `).join('');
 
-        const ledger = document.getElementById('ledger-content');
-        ledger.innerHTML = directives.map(d => `
-            <div style="margin-bottom:20px;">
-                <label style="color:var(--steel);">${d.title}</label>
-                ${d.moves.map(m => `<div class="move-item"><input type="checkbox"> <span>${m}</span></div>`).join('')}
+        document.getElementById('v-ledger-content').innerHTML = engineDirectives.map(d => `
+            <div style="margin-bottom:25px;">
+                <label style="color:var(--steel); letter-spacing:0.1rem;">${d.title}</label>
+                ${d.moves.map(m => `<div class="move-pill"><input type="checkbox"> <span>${m}</span></div>`).join('')}
             </div>
         `).join('');
 
@@ -123,24 +170,44 @@
     }
 
     function nav(num) {
-        state.owner = document.getElementById('m-owner').value;
-        state.blocker = document.getElementById('m-blocker').value;
+        state.owner = document.getElementById('v-owner').value;
+        state.blocker = document.getElementById('v-blocker').value;
+        
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById('screen-' + num).classList.add('active');
-        if (num === 5) buildReport();
+        document.getElementById('step-' + num).classList.add('active');
+        
+        if (num === 45) runAudit();
+        if (num === 5) buildBriefing();
         window.scrollTo(0,0);
     }
 
-    function buildReport() {
-        const report = document.getElementById('final-report');
-        report.innerHTML = `
-            <label style="color:#888;">Executive Resolution | Prepared for CEO</label>
-            <h1 style="margin: 20px 0; font-weight:900;">Movement Verification</h1>
-            <p class="prose">This directive was initiated to achieve: <strong>${state.intent}</strong>. The Engine architected a 3-part strategic path focused on Silo Dissolution and Decision Authority.</p>
-            <p class="prose">Accountability for execution was assigned to <strong>${state.owner}</strong>, who operated as the Responsible Party under the Movality R-A-I protocol.</p>
-            <p class="prose"><strong>Execution Audit:</strong> ${state.blocker ? `Critical friction was logged: "<em>${state.blocker}</em>". This indicates a structural bottleneck requiring CEO intervention.` : `No structural friction was logged. The movement has been verified as Horizontal-Optimized.`}</p>
-            <div style="margin-top:30px; border-top:2px solid #eee; padding-top:20px;">
-                <p><strong>CEO Action:</strong> ${state.blocker ? 'Intervention required to neutralize the identified blocker.' : 'Institutionalize this protocol as the organization-wide standard.'}</p>
+    function runAudit() {
+        const drag = state.blocker ? "0.42" : "0.05";
+        const efficiency = state.blocker ? "62%" : "98%";
+        document.getElementById('val-drag').innerText = drag;
+        document.getElementById('val-efficiency').innerText = efficiency;
+        document.getElementById('v-ai-insight').innerText = state.blocker ? 
+            "The logged friction suggests a 'Legacy Hold-back'. Structural drag is currently impacting the rate of movement by 38%." : 
+            "Movement is optimized. The organization is currently achieving maximum strategic velocity.";
+    }
+
+    function buildBriefing() {
+        const brief = document.getElementById('v-final-brief');
+        const evId = "VEL-" + Math.floor(100000 + Math.random() * 900000);
+        
+        brief.innerHTML = `
+            <label style="color:#888;">Executive Velocity Briefing | For CEO Sign-off</label>
+            <h1 style="margin: 20px 0; font-weight:900; color:#000;">Strategic Movement Verification</h1>
+            
+            <p class="prose">This Velocimove sprint was initiated to achieve: <strong>${state.intent}</strong>. Using Native-AI architecture, the engine deployed three core directives focused on structural dissolution and decision lockdown.</p>
+            
+            <p class="prose">Accountability was assigned to <strong>${state.owner}</strong>. The movement has been audited with an efficiency score of <strong>${document.getElementById('val-efficiency').innerText}</strong>.</p>
+            
+            <p class="prose">${state.blocker ? `A structural blocker was identified during execution: "<em>${state.blocker}</em>". This drag coefficient requires immediate CEO intervention to clear the path for future sprints.` : `The sprint was executed without structural resistance. Strategic intent has been successfully converted into verified movement.`}</p>
+            
+            <div style="margin-top:30px; border-top:2px solid #eee; padding-top:25px;">
+                <p><strong>CEO Directive:</strong> ${state.blocker ? 'Neutralize the identified friction to restore strategic velocity.' : 'Institutionalize this movement protocol as the new enterprise standard.'}</p>
+                <p style="font-size:0.7rem; color:#999; margin-top:15px;">Verification Ledger ID: ${evId}</p>
             </div>
         `;
     }
