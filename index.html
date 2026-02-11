@@ -2,122 +2,103 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>VELOCIMOVE | v42.1 SUCCESSION MASTER</title>
+    <title>VELOCIMOVE | v42.2 INDUSTRIAL ENGINE</title>
     <style>
-        :root { --bg: #050505; --gold: #d4af37; --green: #00ff41; --blue: #00d4ff; --panel: #0d0d0d; }
-        body { background: var(--bg); color: #eee; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; letter-spacing: 1px; }
-        .hud-container { display: grid; grid-template-columns: 320px 1fr 380px; height: 100vh; border: 2px solid #1a1a1a; }
+        :root { --bg: #030303; --gold: #d4af37; --green: #00ff41; --blue: #00d4ff; --panel: #0a0a0a; }
+        body { background: var(--bg); color: #fff; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; letter-spacing: 1px; }
+        .deck { display: grid; grid-template-columns: 320px 1fr 380px; height: 100vh; }
         
-        /* 8-Phase Sidebar */
-        .phase-stack { border-right: 1px solid #222; padding: 25px; background: var(--panel); }
-        .phase { padding: 18px; border: 1px solid #1a1a1a; margin-bottom: 12px; font-size: 0.85rem; color: #333; position: relative; transition: 0.5s; }
-        .phase.active { border-color: var(--gold); color: #fff; background: rgba(212, 175, 55, 0.1); animation: pulse 2s infinite; font-weight: bold; }
+        /* Phase Sidebar */
+        .sidebar { background: var(--panel); border-right: 1px solid #222; padding: 25px; }
+        .phase { padding: 18px; border: 1px solid #1a1a1a; margin-bottom: 12px; font-size: 0.85rem; color: #333; transition: 0.3s; }
+        .phase.active { border-color: var(--gold); color: #fff; background: rgba(212, 175, 55, 0.1); box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.1); }
         .phase.complete { border-color: var(--green); color: var(--green); background: rgba(0, 255, 65, 0.05); }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
         /* Telemetry HUD */
-        .main-telemetry { display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #111 0%, #000 100%); position: relative; }
-        #drag-gauge { font-size: 7rem; font-weight: 900; color: var(--green); text-shadow: 0 0 30px rgba(0,255,65,0.2); margin: 10px 0; }
-        .label { color: var(--gold); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 4px; }
-        #status-bar { border: 1px solid var(--blue); padding: 12px 40px; margin-top: 40px; font-size: 0.9rem; color: var(--blue); text-transform: uppercase; min-width: 300px; text-align: center; }
+        .main { display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #0d0d0d 0%, #000 100%); }
+        #gauge { font-size: 8rem; font-weight: 900; color: var(--green); font-family: 'Impact', sans-serif; }
+        .label { color: var(--gold); text-transform: uppercase; font-size: 1rem; letter-spacing: 5px; }
+        #status { border: 1px solid var(--blue); padding: 10px 40px; margin-top: 30px; font-size: 0.9rem; color: var(--blue); text-transform: uppercase; }
 
-        /* Forensic Ledger */
-        .ledger { border-left: 1px solid #222; padding: 25px; background: var(--panel); overflow-y: hidden; }
-        .evidence-line { border-bottom: 1px solid #1a1a1a; padding: 10px 0; font-size: 0.75rem; color: #666; }
-        .id-tag { color: var(--gold); font-weight: bold; margin-right: 8px; }
-        .led-header { color: var(--gold); font-size: 0.8rem; border-bottom: 1px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
+        /* Action Ledger */
+        .ledger { background: var(--panel); border-left: 1px solid #222; padding: 25px; overflow-y: hidden; }
+        .log-entry { font-size: 0.7rem; color: #555; padding: 6px 0; border-bottom: 1px solid #111; }
+        .id { color: var(--gold); font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="hud-container">
-        <div class="phase-stack" id="phase-list"></div>
-        <div class="main-telemetry">
+    <div class="deck">
+        <div id="phase-list" class="sidebar"></div>
+        <div class="main">
             <div class="label">Drag Coefficient</div>
-            <div id="drag-gauge">0.00</div>
-            <div id="status-bar">AUTHENTICATING...</div>
+            <div id="gauge">0.00</div>
+            <div id="status">BOOTING ENGINE...</div>
         </div>
-        <div class="ledger" id="ledger-stream">
-            <div class="led-header">Forensic Action Ledger</div>
-        </div>
+        <div id="ledger" class="ledger"><div class="label" style="font-size: 0.7rem; margin-bottom:15px;">Action Ledger</div></div>
     </div>
 
 <script>
-const VelocimoveEngine = {
-    currentPhase: 1,
-    evidenceCount: 0,
-    metrics: { latency: 0.03, swirl: 0, velocity: 1.1 },
-    phases: ["Strategic Intent", "Logic Synthesis", "The Logic Gate", "R-A-I Assignment", "Action Ledger", "Velocity Audit", "Succession Loop", "Executive Resolution"],
+const VELOCIMOVE = {
+    step: 1, 
+    count: 0,
+    phases: ["Strategic Intent", "Logic Synthesis", "Logic Gate", "R-A-I Assignment", "Action Ledger", "Velocity Audit", "Succession Loop", "Executive Resolution"],
     
     init() {
-        this.renderPhases();
-        this.addEvidence("SYS-INIT", "ENGINE_ONLINE_v42.1");
-        this.startHeartbeat();
+        this.render();
+        this.log("SYS_INIT", "V42.2 POWERING ON");
+        this.start();
     },
 
-    advance() {
-        if (this.currentPhase < 8) {
-            this.currentPhase++;
-            this.renderPhases();
-            this.addEvidence(`PH-${this.currentPhase}`, `SUCCESSION_DRIVE: ${this.phases[this.currentPhase-1].toUpperCase()}`);
-            
-            if (this.currentPhase === 8) {
-                this.lockMission();
-            }
-        }
-    },
-
-    lockMission() {
-        const bar = document.getElementById('status-bar');
-        bar.innerText = "CEO SEAL AFFIXED - MISSION COMPLETE";
-        bar.style.borderColor = "var(--green)";
-        bar.style.color = "var(--green)";
-        this.addEvidence("CEO-LOCK", "PERMANENT_ARCHIVE_SEALED");
-        document.getElementById('drag-gauge').style.color = "var(--blue)";
-    },
-
-    addEvidence(id, type) {
-        const log = document.getElementById('ledger-stream');
-        const entry = document.createElement('div');
-        entry.className = 'evidence-line';
-        entry.innerHTML = `<span class="id-tag">ID:${id}</span> | ${type}`;
-        log.insertBefore(entry, log.firstChild.nextSibling); // Keep header at top
-        
-        this.evidenceCount++;
-        // The Drive Logic: Every 4 telemetry points, we force a phase advance
-        if (this.evidenceCount % 4 === 0) {
-            this.advance();
-        }
-    },
-
-    renderPhases() {
-        const stack = document.getElementById('phase-list');
-        stack.innerHTML = this.phases.map((p, i) => {
-            const step = i + 1;
-            let status = (step < this.currentPhase) ? "complete" : (step === this.currentPhase ? "active" : "");
-            return `<div class="phase ${status}">${step.toString().padStart(2, '0')} ${p.toUpperCase()} ${status==='complete'?'✓':''}</div>`;
+    render() {
+        const list = document.getElementById('phase-list');
+        list.innerHTML = this.phases.map((name, i) => {
+            const num = i + 1;
+            let cls = (num < this.step) ? 'complete' : (num === this.step ? 'active' : '');
+            return `<div class="phase ${cls}">${num.toString().padStart(2,'0')} ${name.toUpperCase()} ${cls==='complete'?'✓':''}</div>`;
         }).join('');
     },
 
-    startHeartbeat() {
-        // This is the core engine loop. It drives the telemetry and the physics.
-        setInterval(() => {
-            if (this.currentPhase < 8) {
-                // Update Drag Calc
-                const drag = ((this.metrics.latency + (Math.random() * 0.05)) / this.metrics.velocity).toFixed(2);
-                document.getElementById('drag-gauge').innerText = drag;
-                
-                // Update Status
-                document.getElementById('status-bar').innerText = `EXECUTING PHASE ${this.currentPhase}...`;
-                
-                // Generate Evidence
-                const randId = Math.floor(Math.random() * 899) + 100;
-                this.addEvidence(`EV-${randId}`, "TELEMETRY_SYNC_OK");
+    log(id, msg) {
+        const l = document.getElementById('ledger');
+        const e = document.createElement('div');
+        e.className = 'log-entry';
+        e.innerHTML = `<span class="id">ID:${id}</span> | ${msg}`;
+        l.insertBefore(e, l.firstChild.nextSibling);
+        this.count++;
+        // DRIVE LOGIC: Advance phase every 3 entries
+        if (this.count % 3 === 0) this.advance();
+    },
+
+    advance() {
+        if (this.step < 8) {
+            this.step++;
+            this.render();
+            this.log(`PUSH`, `ADVANCING TO PHASE ${this.step}`);
+            if (this.step === 8) {
+                document.getElementById('status').innerText = "CEO SEAL AFFIXED - MISSION CLOSED";
+                document.getElementById('status').style.color = "var(--green)";
+                document.getElementById('status').style.borderColor = "var(--green)";
+                document.getElementById('gauge').style.color = "var(--blue)";
             }
-        }, 2000); // Drives every 2 seconds
+        }
+    },
+
+    start() {
+        setInterval(() => {
+            if (this.step < 8) {
+                // Physics Telemetry
+                const drag = (Math.random() * 0.12 + 0.04).toFixed(2);
+                document.getElementById('gauge').innerText = drag;
+                document.getElementById('status').innerText = `EXECUTING PHASE ${this.step}...`;
+                
+                // Data Injection
+                const id = Math.floor(Math.random() * 899) + 100;
+                this.log(id, "TELEMETRY_SYNC");
+            }
+        }, 1800); // 1.8 second heartbeat
     }
 };
-
-window.onload = () => VelocimoveEngine.init();
+window.onload = () => VELOCIMOVE.init();
 </script>
 </body>
-</html>v
+</html>
