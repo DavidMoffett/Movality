@@ -2,182 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELOCIMOVE | Strategic Flight Deck v42.0</title>
+    <title>VELOCIMOVE | v42.0 Succession Master</title>
     <style>
         :root {
-            --industrial-black: #0a0a0a;
-            --velocity-gold: #d4af37;
-            --thrust-green: #00ff41;
-            --drag-red: #ff3e3e;
-            --logic-blue: #00d4ff;
-            --grid-line: #1a1a1a;
+            --bg: #050505;
+            --gold: #d4af37;
+            --green: #00ff41;
+            --red: #ff3e3e;
+            --blue: #00d4ff;
+            --panel: #111;
         }
+        body { background: var(--bg); color: #eee; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; }
+        .hud-container { display: grid; grid-template-columns: 280px 1fr 320px; height: 100vh; }
+        
+        /* 8-Phase Navigation */
+        .phase-stack { border-right: 1px solid #222; padding: 20px; background: var(--panel); }
+        .phase { padding: 12px; border: 1px solid #222; margin-bottom: 8px; font-size: 0.75rem; color: #555; }
+        .phase.active { border-color: var(--blue); color: var(--blue); background: rgba(0,212,255,0.05); }
+        .phase.complete { border-color: var(--green); color: var(--green); }
 
-        body {
-            background-color: var(--industrial-black);
-            color: #ffffff;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-            margin: 0;
-            overflow: hidden; /* Lock viewport for HUD feel */
-            letter-spacing: 0.05em;
-        }
+        /* Telemetry Center */
+        .telemetry-center { display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+        #drag-gauge { font-size: 5rem; font-weight: bold; color: var(--green); }
+        .label { color: var(--gold); letter-spacing: 3px; font-size: 0.8rem; }
 
-        /* The Industrial Grid */
-        .flight-deck {
-            display: grid;
-            grid-template-columns: 300px 1fr 300px;
-            grid-template-rows: 80px 1fr 200px;
-            height: 100vh;
-            border: 2px solid var(--grid-line);
-        }
-
-        /* Top Header: Strategic Intent & Version */
-        header {
-            grid-column: 1 / span 3;
-            border-bottom: 1px solid var(--grid-line);
-            display: flex;
-            justify-content: space-between;
-            padding: 0 20px;
-            align-items: center;
-            background: linear-gradient(to bottom, #111, #000);
-        }
-
-        .status-pill {
-            border: 1px solid var(--velocity-gold);
-            padding: 4px 12px;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-        }
-
-        /* Left Side: 8-Phase Map */
-        .phase-map {
-            grid-row: 2;
-            border-right: 1px solid var(--grid-line);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .phase-node {
-            padding: 10px;
-            border-left: 3px solid #333;
-            font-size: 0.8rem;
-            opacity: 0.6;
-            transition: all 0.3s;
-        }
-
-        .phase-node.active {
-            border-left-color: var(--logic-blue);
-            opacity: 1;
-            background: rgba(0, 212, 255, 0.05);
-        }
-
-        /* Center: Kinetic Visualization (The HUD) */
-        .main-telemetry {
-            grid-row: 2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        .drag-coefficient-display {
-            text-align: center;
-        }
-
-        .cd-value {
-            font-size: 5rem;
-            font-weight: 800;
-            color: var(--thrust-green);
-        }
-
-        .cd-label {
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            color: var(--velocity-gold);
-        }
-
-        /* Right Side: Action Ledger (Evidence ID Stream) */
-        .action-ledger {
-            grid-row: 2;
-            border-left: 1px solid var(--grid-line);
-            padding: 20px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.75rem;
-            overflow-y: auto;
-        }
-
-        .evidence-id {
-            margin-bottom: 10px;
-            color: #888;
-        }
-
-        .evidence-id span {
-            color: var(--thrust-green);
-        }
-
-        /* Footer: Succession Logic Output */
-        footer {
-            grid-column: 1 / span 3;
-            border-top: 1px solid var(--grid-line);
-            padding: 20px;
-            background: rgba(212, 175, 55, 0.05);
-        }
-
-        .succession-alert {
-            color: var(--velocity-gold);
-            font-weight: bold;
-            text-transform: uppercase;
-        }
+        /* Action Ledger */
+        .ledger { border-left: 1px solid #222; padding: 15px; background: var(--panel); font-size: 0.7rem; }
+        .evidence-line { margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 5px; }
+        .id-tag { color: var(--gold); }
     </style>
 </head>
 <body>
-
-<div class="flight-deck">
-    <header>
-        <div>
-            <h1 style="margin:0; font-size: 1.2rem; color: var(--velocity-gold);">VELOCIMOVE</h1>
-            <span style="font-size: 0.6rem;">MISSION: STRATEGIC INTENT ALPHA</span>
+    <div class="hud-container">
+        <div class="phase-stack" id="phase-list">
+            </div>
+        
+        <div class="telemetry-center">
+            <div class="label">DRAG COEFFICIENT</div>
+            <div id="drag-gauge">0.00</div>
+            <div id="velocity-status" style="font-size: 0.9rem;">INITIALIZING ENGINE...</div>
         </div>
-        <div class="status-pill">v42.0 SUCCESSION MASTER</div>
-    </header>
 
-    <aside class="phase-map">
-        <div class="phase-node active">01 STRATEGIC INTENT</div>
-        <div class="phase-node active">02 LOGIC SYNTHESIS</div>
-        <div class="phase-node active">03 LOGIC GATE</div>
-        <div class="phase-node active">04 R-A-I ASSIGNMENT</div>
-        <div class="phase-node active">05 ACTION LEDGER</div>
-        <div class="phase-node active">06 VELOCITY AUDIT</div>
-        <div class="phase-node">07 SUCCESSION LOOP</div>
-        <div class="phase-node">08 EXECUTIVE RESOLUTION</div>
-    </aside>
+        <div class="ledger" id="ledger-stream">
+            <div class="label" style="margin-bottom: 10px;">FORENSIC LEDGER</div>
+            </div>
+    </div>
 
-    <main class="main-telemetry">
-        <div class="drag-coefficient-display">
-            <div class="cd-label">DRAG COEFFICIENT</div>
-            <div class="cd-value">0.18</div>
-            <div style="color: var(--thrust-green); font-size: 0.8rem;">OPTIMAL FLOW</div>
-        </div>
-        </main>
-
-    <aside class="action-ledger">
-        <div style="border-bottom: 1px solid #333; margin-bottom: 10px; padding-bottom: 5px;">LIVE EVIDENCE STREAM</div>
-        <div class="evidence-id">ID: <span>VM-42-FIN-992</span> - VERIFIED</div>
-        <div class="evidence-id">ID: <span>VM-42-HR-104</span> - VERIFIED</div>
-        <div class="evidence-id">ID: <span>VM-42-OPS-441</span> - VERIFIED</div>
-        <div class="evidence-id" style="color: var(--drag-red);">ID: <span>PENDING</span> - LATENCY DETECTED</div>
-    </aside>
-
-    <footer>
-        <div class="succession-alert">Phase 7: Succession Logic Active</div>
-        <div style="font-size: 0.8rem; margin-top: 5px;">
-            Target: [Responsible Node 04] efficiency dropping. Succession Observer [ID: 882] primed for promotion.
-        </div>
-    </footer>
-</div>
-
+    <script src="engine.js"></script>
 </body>
 </html>
